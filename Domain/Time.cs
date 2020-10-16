@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace Domain
 {
-    public class Time
+    public abstract class Time
     {
+        public Guid Id { get; private set; } = new Guid();
         public string NomeTime {get; private set;}
-        private List<Jogador> jogadores { get; set;}
-        public IReadOnlyCollection<Jogador> Jogadores => jogadores;
+        private List<JogadorTime> jogadores { get; set;}
+        public IReadOnlyCollection<JogadorTime> Jogadores => jogadores;
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
         public int Vitorias { get; private set; }   
@@ -20,7 +21,8 @@ namespace Domain
         public Time(string nomeTime)
         {
             NomeTime = nomeTime;
-            jogadores = new List<Jogador>();
+            jogadores = new List<JogadorTime>();
+            Id = Guid.NewGuid();        
         }
 
         public void DisputarPartida()
@@ -73,18 +75,17 @@ namespace Domain
             }
         }
 
-        public bool AdicionarJogador(Jogador jogador)
+        public bool AdicionarJogador(JogadorTime jogador)
         {
             if (jogadores.Count < 16 || jogadores.Count > 32 )
             {
                 return false;
             }
-            jogador.DesvincularTime();
             jogadores.Add(jogador);
             return true;
         }
 
-        public bool RemoverJogador(Jogador jogador)
+        public bool RemoverJogador(JogadorTime jogador)
         {
             if (jogadores.Count < 16 || jogadores.Count > 32 )
             {

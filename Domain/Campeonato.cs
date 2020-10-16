@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Domain
 {
     public class Campeonato
     {
-        private List<Time> times { get; set; }
-        public IReadOnlyCollection<Time> Times => times;
+        private List<TimeCampeonato> times { get; set; }
+        public IReadOnlyCollection<TimeCampeonato> Times => times;
         private bool inicioCampeonato = false;
         public int Rodada { get; private set; }
         //private (int anfitriao, int visitante) confronto;
 
-        public void CadastrarTimes(Usuario usuario, List<Time> times)
+        public void CadastrarTimes(Usuario usuario, List<TimeCampeonato> times)
         {
             if (!(usuario is CBF))
             {
@@ -33,12 +34,12 @@ namespace Domain
             inicioCampeonato = true;
         }
 
-        private List<(Time anfitriao, Time visitante)> GerarProximoConfronto()
+        private List<(TimeCampeonato anfitriao, TimeCampeonato visitante)> GerarProximoConfronto()
         {
             Random sorteador = new Random();
             var quemJogaComQuem = new List<int>();
 
-            var partida = new List<(Time anfitriao, Time visitante)>();
+            var partida = new List<(TimeCampeonato anfitriao, TimeCampeonato visitante)>();
 
             while (quemJogaComQuem.Count <= times.Count)
             {
@@ -68,14 +69,37 @@ namespace Domain
         {
             var geradorGols = new Random();
 
-            return geradorGols.Next(0, 5);
+            return geradorGols.Next(0, 6);
         }
 
-        private int GeradorProbabilidadeTimeVencedor()
-        {
-            var geradorGols = new Random();
+        // private int GeradorProbabilidadeTimeVencedor()
+        // {
+        //     var geradorGols = new Random();
 
-            return geradorGols.Next(0, 100);
+        //     return geradorGols.Next(0, 100);
+        // }
+
+        private void GeradorJogadoresGoleadores(TimeCampeonato timeVencedor, TimeCampeonato timePerdedor, int golFeitos)
+        {
+            var gerador = new Random();
+            var idTime = timeVencedor.Id; 
+            
+            for (int i = 0; i < golFeitos; i++)
+            {
+                var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
+                var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
+                
+                if (jogadorGoleador.Nome == "Gol Contra")
+                {
+                    timePerdedor.MarcarGolsPro();
+                    timeVencedor.MarcarGolsContra();
+                    continue;
+                }
+
+                times.Find(i => i.Id == idTime).MarcarGolsPro();
+                times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
+            }
+    
         }
 
         public void ExibirResultado(Usuario usuario)
@@ -86,25 +110,53 @@ namespace Domain
             }
 
             Rodada++;
+            
             var partidas = GerarProximoConfronto();
-
+            // var golsGanhador = 0;
+            // var golsPerdedor = 0;
+            // // Pensar em casa =>
             for (int i = 0; i < partidas.Count; i++)
             {
-                var putGols = GeradorGols();
-                var timeAnfitricaoVence = GeradorProbabilidadeTimeVencedor();
-                var timeVisitanteVence = 100 - timeAnfitricaoVence;    
+                var timeAnfitriaoGols = GeradorGols();
+                var timeVisitanteGols = 6 - timeAnfitriaoGols;              
+                // var timeAnfitricaoVence = GeradorProbabilidadeTimeVencedor();
+                // var timeVisitanteVence = 100 - timeAnfitricaoVence;  
+                var timesEmPartida = partidas.ElementAt(i);
 
-                //TODO criar gerador probabilistico de gol contra
-                //TODO criar gerador de aleatoriedade de jogador
+                if (timeAnfitriaoGols > timeVisitanteGols)
+                {
+                    GeradorJogadoresGoleadores(timesEmPartida.anfitriao, timesEmPartida.visitante, timeAnfitriaoGols);
+                    timesEmPartida.anfitriao.MarcarVitoria();
+                    timesEmPartida.visitante.MarcarDerrota();
+                }
+                else if (timeAnfitriaoGols < timeVisitanteGols)
+                {
+                    GeradorJogadoresGoleadores(timesEmPartida.visitante, timesEmPartida.anfitriao, timeVisitanteGols);
+                    timesEmPartida.anfitriao.MarcarDerrota();
+                    timesEmPartida.visitante.MarcarVitoria();
+                }
+                else
+                {
+                    for (int j = 0; j < timeAnfitriaoGols; j++)
+                    {
+                        timesEmPartida.anfitriao.MarcarGolsPro();
+                        timesEmPartida.visitante.MarcarGolsPro();
+                    }
+
+                    timesEmPartida.anfitriao.MarcarEmpate();
+                    timesEmPartida.visitante.MarcarEmpate();
+                }
+
+                
             }
-            
+                        
         }
 
         public void ApresentarTabela(Usuario usuario)
         {
             System.Console.WriteLine("---------- Tabela Do Brasileirão ---------");
             System.Console.WriteLine("------------------------------------------");
-            System.Console.WriteLine("Time | PT | PD | V | E | D | GP | GC | PA");
+            System.Console.WriteLine("Time | PT | PD | V | E | D | GP | GC | %");
             System.Console.WriteLine("------------------------------------------");
 
             foreach (var time in times)
