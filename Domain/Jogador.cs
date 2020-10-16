@@ -3,19 +3,13 @@ namespace Domain
     public class Jogador
     {
         public string Nome { get; private set; }
-        public string Posicao { get; private set;}
-        public int QtGols { get; private set; }
-
-        public Jogador(string nome, string posicao)
+        public Time Time { get; private set; }     
+        public Jogador(string nome, Time time)
         {
-            
             Nome = nome;
-            Posicao = posicao;
+            Time = time;
         }
 
-        public void MarcarGol()
-        {
-            QtGols++;
-        }
+     
     }
 }

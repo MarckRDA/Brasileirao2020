@@ -55,6 +55,11 @@ namespace Domain
             GolsPro++;
         }
 
+        public void AtualizarPerctAproveitamento()
+        {
+            PercentagemAproveitamento = (Pontuacao/(PartidasDisputadas * 3))*100;
+        }
+
         public void MarcarPontuacao()
         {
             if (this.MarcarVitoria())
@@ -87,6 +92,11 @@ namespace Domain
 
             jogadores.Remove(jogador);
             return true;
+        }
+
+        public override string ToString()
+        {
+            return $"{NomeTime} - {Pontuacao} - {PartidasDisputadas} - {Vitorias} - {Empate} - {Derrotas} - {GolsPro} - {GolsContra} - {PercentagemAproveitamento}";
         }
 
     }
