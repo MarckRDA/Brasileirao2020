@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Domain
@@ -96,7 +97,7 @@ namespace Domain
 
         public override string ToString()
         {
-            return $"{NomeTime} - {Pontuacao} - {PartidasDisputadas} - {Vitorias} - {Empate} - {Derrotas} - {GolsPro} - {GolsContra} - {PercentagemAproveitamento}";
+            return $"{NomeTime} | {Pontuacao} | {PartidasDisputadas} | {Vitorias} | {Empate} | {Derrotas} | {GolsPro} | {GolsContra} | {Math.Round(PercentagemAproveitamento, 2)}%";
         }
 
     }

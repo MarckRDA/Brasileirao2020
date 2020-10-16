@@ -1,10 +1,10 @@
 namespace Domain
 {
-    public class Torcedor
+    public sealed class Torcedor : Usuario
     {
-        public void ApresentarTabelaCampeonato()
-        {
-            
-        }
+       public Torcedor(string nome) : base(nome)
+       {
+           Nome = nome;
+       }
     }
 }
