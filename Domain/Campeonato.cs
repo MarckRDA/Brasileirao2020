@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Domain
@@ -8,11 +9,20 @@ namespace Domain
         public IReadOnlyCollection<Time> Times => times;
         private bool inicioCampeonato = false;
         public int Rodada { get; private set; }
-
+        //private (int anfitriao, int visitante) confronto;
+        private Random sorteador = new Random();
+        private List<(Time anfitrião, Time visitante)> GerarConfrontos()
+        {
+            
+            while (true)
+            {
+                sorteador.Next(1, times.Count);
+            }
+        }
 
         public void ApresentarTabela(Usuario usuario)
         {
-            System.Console.WriteLine("/t ------ Tabela Do Brasileirão -----");
+            System.Console.WriteLine("---------- Tabela Do Brasileirão ---------");
             System.Console.WriteLine("------------------------------------------");
             System.Console.WriteLine("Time | PT | PD | V | E | D | GP | GC | PA");
             System.Console.WriteLine("------------------------------------------");
@@ -43,6 +53,8 @@ namespace Domain
             }
 
             this.times = times;
+
+            inicioCampeonato = true;
         }
         
     }
