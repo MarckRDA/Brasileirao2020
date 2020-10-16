@@ -19,7 +19,7 @@ namespace Domain
 
             while (quemJogaComQuem.Count <= times.Count)
             {
-                int getNumber = sorteador.Next(0, times.Count);
+                int getNumber = sorteador.Next(0, times.Count - 1);
                 
                 if (!quemJogaComQuem.Contains(getNumber))
                 {
@@ -29,7 +29,7 @@ namespace Domain
 
             for (int i = 0; i < times.Count; i+=2)
             {
-                partida.Add((times[i], times[i + 1]));
+                partida.Add((times[quemJogaComQuem[i]], times[quemJogaComQuem[i+1]]));
             } 
 
             return partida;
