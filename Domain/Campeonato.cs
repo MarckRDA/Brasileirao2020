@@ -10,14 +10,29 @@ namespace Domain
         private bool inicioCampeonato = false;
         public int Rodada { get; private set; }
         //private (int anfitriao, int visitante) confronto;
-        private Random sorteador = new Random();
-        private List<(Time anfitrião, Time visitante)> GerarConfrontos()
+        private List<(Time anfitriao, Time visitante)> GerarConfrontos()
         {
+            Random sorteador = new Random();
+            var quemJogaComQuem = new List<int>();
             
-            while (true)
+            var partida = new List<(Time anfitriao, Time visitante)>();
+
+            while (quemJogaComQuem.Count <= times.Count)
             {
-                sorteador.Next(1, times.Count);
+                int getNumber = sorteador.Next(0, times.Count);
+                
+                if (!quemJogaComQuem.Contains(getNumber))
+                {
+                    quemJogaComQuem.Add(getNumber);
+                }
             }
+
+            for (int i = 0; i < times.Count; i+=2)
+            {
+                partida.Add((times[i], times[i + 1]));
+            } 
+
+            return partida;
         }
 
         public void ApresentarTabela(Usuario usuario)
