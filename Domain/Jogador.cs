@@ -4,7 +4,6 @@ namespace Domain
     {
         public string Nome { get; private set; }
         public Time Time { get; private set; }     
-
         public int Gol { get; private set;}
         public Jogador(string nome, Time time)
         {
@@ -12,6 +11,10 @@ namespace Domain
             Time = time;
         }
 
+        public void DesvincularTime()
+        {
+            Time = null;
+        }
      
     }
 }

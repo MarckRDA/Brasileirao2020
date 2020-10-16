@@ -79,7 +79,7 @@ namespace Domain
             {
                 return false;
             }
-
+            jogador.DesvincularTime();
             jogadores.Add(jogador);
             return true;
         }
