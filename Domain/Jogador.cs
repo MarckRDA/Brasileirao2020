@@ -8,6 +8,7 @@ namespace Domain
 
         public Jogador(string nome, string posicao)
         {
+            
             Nome = nome;
             Posicao = posicao;
         }
