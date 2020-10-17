@@ -7,7 +7,7 @@ namespace Domain
     {
         public Guid Id { get; private set; } = new Guid();
         public string NomeTime {get; private set;}
-        private List<Jogador> jogadores { get; set;}
+        private List<Jogador> jogadores { get; set;} = new List<Jogador>();
         public IReadOnlyCollection<Jogador> Jogadores => jogadores;
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 

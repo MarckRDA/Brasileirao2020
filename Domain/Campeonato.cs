@@ -6,7 +6,7 @@ namespace Domain
 {
     public abstract class Campeonato
     {
-        private List<Time> times { get; set; }
+        private List<Time> times { get; set; } = new List<Time>();
         public IReadOnlyCollection<Time> Times => times;
         private bool inicioCampeonato = false;
         public int Rodada { get; private set; } = 1;
