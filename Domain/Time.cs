@@ -7,13 +7,15 @@ namespace Domain
     {
         public Guid Id { get; private set; } = new Guid();
         public string NomeTime {get; private set;}
-        private List<JogadorTime> jogadores { get; set;}
-        public IReadOnlyCollection<JogadorTime> Jogadores => jogadores;
+        private List<Jogador> jogadores { get; set;}
+        public IReadOnlyCollection<Jogador> Jogadores => jogadores;
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
-        public int Vitorias { get; private set; }   
+        public int Vitorias { get; private set; } 
+        private bool vitoria = false;  
         public int Derrotas { get; private set; }   
         public int Empate { get; private set;} 
+        private bool empate = false;
         public int GolsPro { get; private set;}
         public int GolsContra { get; private set;} 
         public double PercentagemAproveitamento { get; private set;}
@@ -21,7 +23,7 @@ namespace Domain
         public Time(string nomeTime)
         {
             NomeTime = nomeTime;
-            jogadores = new List<JogadorTime>();
+            jogadores = new List<Jogador>();
             Id = Guid.NewGuid();        
         }
 
@@ -30,22 +32,23 @@ namespace Domain
             PartidasDisputadas++;
         }
 
-        public bool MarcarVitoria()
+        public void MarcarVitoria()
         {
             Vitorias++;
-            return true;
+            vitoria = true;
+            empate = false;
         }
         
-        public bool MarcarDerrota()
+        public void MarcarDerrota()
         {
             Derrotas++;
-            return true;
         }
 
-        public bool MarcarEmpate()
+        public void MarcarEmpate()
         {
             Empate++;
-            return true;
+            vitoria = false;
+            empate = true;
         }
 
         public void MarcarGolsContra()
@@ -65,19 +68,19 @@ namespace Domain
 
         public void MarcarPontuacao()
         {
-            if (this.MarcarVitoria())
+            if (vitoria)
             {
                 Pontuacao +=3;
             }
-            else if (this.MarcarEmpate())
+            else if (empate)
             {
                 Pontuacao +=1;
             }
         }
 
-        public bool AdicionarJogador(JogadorTime jogador)
+        public bool AdicionarJogador(Jogador jogador)
         {
-            if (jogadores.Count < 16 || jogadores.Count > 32 )
+            if (jogadores.Count < 16 && jogadores.Count > 32 )
             {
                 return false;
             }
@@ -85,9 +88,9 @@ namespace Domain
             return true;
         }
 
-        public bool RemoverJogador(JogadorTime jogador)
+        public bool RemoverJogador(Jogador jogador)
         {
-            if (jogadores.Count < 16 || jogadores.Count > 32 )
+            if (jogadores.Count < 16 && jogadores.Count > 32 )
             {
                 return false;
             }

@@ -4,15 +4,17 @@ using System.Linq;
 
 namespace Domain
 {
-    public class Campeonato
+    public abstract class Campeonato
     {
-        private List<TimeCampeonato> times { get; set; }
-        public IReadOnlyCollection<TimeCampeonato> Times => times;
+        private List<Time> times { get; set; }
+        public IReadOnlyCollection<Time> Times => times;
         private bool inicioCampeonato = false;
-        public int Rodada { get; private set; }
-        //private (int anfitriao, int visitante) confronto;
+        public int Rodada { get; private set; } = 1;
+        private List<JogadorArtilheiro> jogadoresArtilheiros = new List<JogadorArtilheiro>();
+        private List<int> logDePartidas = new List<int>();
 
-        public void CadastrarTimes(Usuario usuario, List<TimeCampeonato> times)
+        // *<------------------- Metodos de operações externas a classe --------------------------->
+        public void CadastrarTimes(Usuario usuario, List<Time> times)
         {
             if (!(usuario is CBF))
             {
@@ -34,12 +36,151 @@ namespace Domain
             inicioCampeonato = true;
         }
 
-        private List<(TimeCampeonato anfitriao, TimeCampeonato visitante)> GerarProximoConfronto()
+        public bool RemoverJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
+        {
+            if (!(usuario is CBF))
+            {
+                throw new PermissaoNegadaException("Essa função só pode ser acessada como CBF!"); 
+            }
+            return times.FirstOrDefault(time => time.Id == idTime).RemoverJogador(jogador);
+        }
+
+        public bool AdicionarJogadorTime (Usuario usuario, Guid idTime, Jogador jogador)
+        {
+            if (!(usuario is CBF))
+            {
+                throw new PermissaoNegadaException("Essa função só pode ser acessada como CBF!"); 
+            }
+            return times.FirstOrDefault(time => time.Id == idTime).AdicionarJogador(jogador);
+        }
+
+        public List<string> ApresentarTabela(Usuario usuario)
+        {
+            var listaTabelaDeClassificacao = new List<string>();
+            times.OrderByDescending(time => time.Pontuacao);
+
+            foreach (var time in times)
+            {
+                listaTabelaDeClassificacao.Add(time.ToString());
+            }
+
+            return listaTabelaDeClassificacao;
+        }
+        public List<string> ExibirTimesClassificadosLibertadores(Usuario usuario) => ApresentarTabela(usuario).Take(4).ToList();
+
+        public List<string> ExibirTimesRebaixados(Usuario usuario)
+        {
+            var rebaixados = new List<string>();
+
+            for (int i = -4; i < 0; i++)
+            {
+                rebaixados.Add(ApresentarTabela(usuario)[i]);
+            }
+
+            return rebaixados;
+        }
+
+        public List<string> ExibirClassificacaoDeArtilheiros()
+        {
+            var listaDeGolsTime = new List<int>();
+            var jogadoresArtilheiros = new List<JogadorArtilheiro>();
+            var tabelaArtilheiros = new List<string>();
+            var nomeJogadorGoleador = "";
+            var qtdGolsJogadorGoleador = 0;
+
+            for (int i = 0; i < times.Count; i++)
+            {
+                for (int j = 0; j < times.ElementAt(i).Jogadores.Count; j++)
+                {
+                    listaDeGolsTime.Add(times.ElementAt(i).Jogadores.ElementAt(j).Gol);
+                }
+
+                qtdGolsJogadorGoleador = listaDeGolsTime.Max();
+                nomeJogadorGoleador = times.ElementAt(i).Jogadores.FirstOrDefault(x => x.Gol == qtdGolsJogadorGoleador).Nome;
+
+                var jogadorArtilheiro = new JogadorArtilheiroCampeonato(nomeJogadorGoleador, qtdGolsJogadorGoleador, times.ElementAt(i).NomeTime);
+
+                jogadoresArtilheiros.Add(jogadorArtilheiro);
+                listaDeGolsTime.Clear();
+            }
+
+            jogadoresArtilheiros.OrderByDescending(jogador => jogador.Gol);
+            tabelaArtilheiros = jogadoresArtilheiros.Select((jogadorArtilheiro, index) => $"{index + 1} {jogadorArtilheiro.Nome} - Gols: {jogadorArtilheiro.Gol} - Time: {jogadorArtilheiro.NomeTime}").ToList();
+
+            return tabelaArtilheiros;
+        }
+
+        public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas)
+        {
+            var resultadosDaPartida = GerarRodada(qtdRodadas);
+            var listaResultados = new List<string>();
+            for (int i = 0; i < resultadosDaPartida.Count; i++)
+            {
+                var resultadosAMostrar = $"Rodada {resultadosDaPartida[i].rodada} Resultado: {resultadosDaPartida[i].Item1.anfitriao} {resultadosDaPartida[i].Item1.golsAnfitriao} X {resultadosDaPartida[i].Item1.golsVisitante} {resultadosDaPartida[i].Item1.visitante}/n";
+                listaResultados.Add(resultadosAMostrar);
+            }
+            return listaResultados;
+        }
+
+        // *<------------------- Metodos de operações internas a classe --------------------------->
+        private List<((string anfitriao, int golsAnfitriao, string visitante, int golsVisitante), int rodada)> GerarRodada(int qtdRodadas)
+        {
+            var listaResultadosRodada = new List<((string anfitriao, int golsAnfitriao, string visitante, int golsVisitante), int rodada)>();
+            while (qtdRodadas <= Rodada)
+            {
+                Rodada++;
+
+                var partidas = GerarProximoConfronto();
+
+                for (int i = 0; i < partidas.Count; i++)
+                {
+                    var timeAnfitriaoGols = GeradorGols();
+                    var timeVisitanteGols = 6 - timeAnfitriaoGols;
+                    var timesEmPartida = partidas.ElementAt(i);
+
+                    if (timeAnfitriaoGols > timeVisitanteGols)
+                    {
+                        GeradorJogadoresGoleadores(timesEmPartida.anfitriao, timesEmPartida.visitante, timeAnfitriaoGols);
+                        timesEmPartida.anfitriao.MarcarVitoria();
+                        timesEmPartida.anfitriao.MarcarPontuacao();
+                        timesEmPartida.visitante.MarcarDerrota();
+                        listaResultadosRodada.Add(((timesEmPartida.anfitriao.NomeTime, timeAnfitriaoGols, timesEmPartida.visitante.NomeTime, timeVisitanteGols), Rodada));
+                    }
+                    else if (timeAnfitriaoGols < timeVisitanteGols)
+                    {
+                        GeradorJogadoresGoleadores(timesEmPartida.visitante, timesEmPartida.anfitriao, timeVisitanteGols);
+                        timesEmPartida.anfitriao.MarcarDerrota();
+                        timesEmPartida.visitante.MarcarVitoria();
+                        timesEmPartida.visitante.MarcarPontuacao();
+                        listaResultadosRodada.Add(((timesEmPartida.anfitriao.NomeTime, timeAnfitriaoGols, timesEmPartida.visitante.NomeTime, timeVisitanteGols), Rodada));
+                    }
+                    else
+                    {
+                        for (int j = 0; j < timeAnfitriaoGols; j++)
+                        {
+                            timesEmPartida.anfitriao.MarcarGolsPro();
+                            timesEmPartida.visitante.MarcarGolsPro();
+                        }
+
+                        timesEmPartida.anfitriao.MarcarEmpate();
+                        timesEmPartida.anfitriao.MarcarPontuacao();
+                        timesEmPartida.visitante.MarcarEmpate();
+                        timesEmPartida.visitante.MarcarPontuacao();
+                        listaResultadosRodada.Add(((timesEmPartida.anfitriao.NomeTime, timeAnfitriaoGols, timesEmPartida.visitante.NomeTime, timeVisitanteGols), Rodada));
+                    }
+
+                }
+
+            }
+
+            return listaResultadosRodada;
+        }
+        private List<(Time anfitriao, Time visitante)> GerarProximoConfronto()
         {
             Random sorteador = new Random();
             var quemJogaComQuem = new List<int>();
 
-            var partida = new List<(TimeCampeonato anfitriao, TimeCampeonato visitante)>();
+            var partida = new List<(Time anfitriao, Time visitante)>();
 
             while (quemJogaComQuem.Count <= times.Count)
             {
@@ -56,12 +197,6 @@ namespace Domain
                 partida.Add((times[quemJogaComQuem[i]], times[quemJogaComQuem[i + 1]]));
             }
 
-            System.Console.WriteLine($"----------Rodada{Rodada} do brasileirão");
-            foreach (var time in partida)
-            {
-                System.Console.WriteLine($"{time.anfitriao.NomeTime} X {time.visitante.NomeTime}");
-            }
-
             return partida;
         }
 
@@ -72,23 +207,16 @@ namespace Domain
             return geradorGols.Next(0, 6);
         }
 
-        // private int GeradorProbabilidadeTimeVencedor()
-        // {
-        //     var geradorGols = new Random();
-
-        //     return geradorGols.Next(0, 100);
-        // }
-
-        private void GeradorJogadoresGoleadores(TimeCampeonato timeVencedor, TimeCampeonato timePerdedor, int golFeitos)
+        private void GeradorJogadoresGoleadores(Time timeVencedor, Time timePerdedor, int golFeitos)
         {
             var gerador = new Random();
-            var idTime = timeVencedor.Id; 
-            
+            var idTime = timeVencedor.Id;
+
             for (int i = 0; i < golFeitos; i++)
             {
                 var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
                 var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
-                
+
                 if (jogadorGoleador.Nome == "Gol Contra")
                 {
                     timePerdedor.MarcarGolsPro();
@@ -99,72 +227,9 @@ namespace Domain
                 times.Find(i => i.Id == idTime).MarcarGolsPro();
                 times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
             }
-    
+
         }
 
-        public void ExibirResultado(Usuario usuario)
-        {
-            if (!(usuario is CBF))
-            {
-                throw new PermissaoNegadaException("Você tem de ser o administrador para acessar a função");
-            }
 
-            Rodada++;
-            
-            var partidas = GerarProximoConfronto();
-            // var golsGanhador = 0;
-            // var golsPerdedor = 0;
-            // // Pensar em casa =>
-            for (int i = 0; i < partidas.Count; i++)
-            {
-                var timeAnfitriaoGols = GeradorGols();
-                var timeVisitanteGols = 6 - timeAnfitriaoGols;              
-                // var timeAnfitricaoVence = GeradorProbabilidadeTimeVencedor();
-                // var timeVisitanteVence = 100 - timeAnfitricaoVence;  
-                var timesEmPartida = partidas.ElementAt(i);
-
-                if (timeAnfitriaoGols > timeVisitanteGols)
-                {
-                    GeradorJogadoresGoleadores(timesEmPartida.anfitriao, timesEmPartida.visitante, timeAnfitriaoGols);
-                    timesEmPartida.anfitriao.MarcarVitoria();
-                    timesEmPartida.visitante.MarcarDerrota();
-                }
-                else if (timeAnfitriaoGols < timeVisitanteGols)
-                {
-                    GeradorJogadoresGoleadores(timesEmPartida.visitante, timesEmPartida.anfitriao, timeVisitanteGols);
-                    timesEmPartida.anfitriao.MarcarDerrota();
-                    timesEmPartida.visitante.MarcarVitoria();
-                }
-                else
-                {
-                    for (int j = 0; j < timeAnfitriaoGols; j++)
-                    {
-                        timesEmPartida.anfitriao.MarcarGolsPro();
-                        timesEmPartida.visitante.MarcarGolsPro();
-                    }
-
-                    timesEmPartida.anfitriao.MarcarEmpate();
-                    timesEmPartida.visitante.MarcarEmpate();
-                }
-
-                
-            }
-                        
-        }
-
-        public void ApresentarTabela(Usuario usuario)
-        {
-            System.Console.WriteLine("---------- Tabela Do Brasileirão ---------");
-            System.Console.WriteLine("------------------------------------------");
-            System.Console.WriteLine("Time | PT | PD | V | E | D | GP | GC | %");
-            System.Console.WriteLine("------------------------------------------");
-
-            foreach (var time in times)
-            {
-                System.Console.WriteLine(time.ToString());
-            }
-
-            System.Console.WriteLine("------------------------------------------");
-        }
     }
 }
