@@ -20,7 +20,7 @@ namespace Domain
         public int GolsContra { get; private set;} 
         public double PercentagemAproveitamento { get; private set;}
 
-        public Time(string nomeTime)
+        protected Time(string nomeTime)
         {
             NomeTime = nomeTime;
             jogadores = new List<Jogador>();
