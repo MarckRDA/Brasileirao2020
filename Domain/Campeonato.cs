@@ -11,7 +11,7 @@ namespace Domain
         private bool inicioCampeonato = false;
         private int nRodada = 1;
         private List<JogadorArtilheiro> jogadoresArtilheiros = new List<JogadorArtilheiro>();
-        private List<Partida> partidas = new List<Partida>(); // !!Ponto de anteção; Para plano de contigência apagar essa linha
+        private List<Partida> partidas = new List<Partida>(); // !!Ponto de atenção; Para plano de contigência apagar essa linha
         private List<Rodada> rodadas = new List<Rodada>(); // ! Ponto de atenção; Para plano de contigência apagar essa linha
         private Partida partida; // ! Criado só para criar o tipo de partida fazendo injeção de dependencia; Para plano de contigência apagar essa linha
         private Rodada rodada; // ! ! Criado só para criar o tipo de Rodada fazendo injeção de dependencia; Para plano de contigência apagar essa linha
