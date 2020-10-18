@@ -16,8 +16,7 @@ namespace Domain
         private Partida partida; // ! Criado só para criar o tipo de partida fazendo injeção de dependencia; Para plano de contigência apagar essa linha
         private Rodada rodada; // ! ! Criado só para criar o tipo de Rodada fazendo injeção de dependencia; Para plano de contigência apagar essa linha
         private JogadorArtilheiro jogadorArtilheiro;
-        private Partida tipoDePartida;
-        private Rodada tipoDeRodada;
+      
 
         // ! Se der merda, para plano de contigência apagar essa linha
         protected Campeonato(Partida tipoDePartida, Rodada tipoDeRodada, JogadorArtilheiro tipoJogadorArtilheiro)
