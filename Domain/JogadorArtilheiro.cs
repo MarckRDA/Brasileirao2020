@@ -1,13 +1,7 @@
-using System;
-
 namespace Domain
 {
-    public abstract class JogadorArtilheiro : IJogador
+    public abstract class JogadorArtilheiro : Jogador
     {
-        public Guid Id { get; private set; } = new Guid();
-        private string nome;
-        private int gol = 0;
-
         public string NomeTime { get; private set; }
         protected JogadorArtilheiro(){}
 
@@ -21,31 +15,6 @@ namespace Domain
             {
                 this.MarcarGol();
             }
-        }
-
-        public void MarcarGol()
-        {
-            gol++;
-        }
-
-        public void AdicionarNomeJogador(string nome)
-        {
-            this.nome = nome;
-        }
-
-        public int MostrarGols()
-        {
-            return gol;
-        }
-
-        public string MostrarNome()
-        {
-            return nome;
-        }
-
-        public Guid MostrarID()
-        {
-            return Id;
         }
     }
 }

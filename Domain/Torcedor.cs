@@ -1,13 +1,9 @@
 namespace Domain
 {
-    public sealed class Torcedor : IUsuario
+    public sealed class Torcedor : Usuario
     {
-        public string Nome { get; private set; }
-        public Torcedor(string nome)
+        public Torcedor(string nome) : base(nome)
         {
-            Nome = nome;
         }
-
-
     }
 }
