@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 
 namespace Domain
 {
-    public abstract class TabelaDeEstatisticaTime
+    public abstract class TabelaDeEstatisticaTime 
     {
         public Time Time {get; set;}
         public int Pontuacao { get; private set;}
@@ -16,6 +15,8 @@ namespace Domain
         public int GolsPro { get; private set;}
         public int GolsContra { get; private set;} 
         public double PercentagemAproveitamento { get; private set;}
+
+      
 
         
         public void DisputarPartida()

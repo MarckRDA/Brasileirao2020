@@ -15,7 +15,7 @@ namespace Domain
         {
             NomeTime = nomeTime;
             jogadores = new List<Jogador>();
-            Id = Guid.NewGuid();        
+            Id = Guid.NewGuid();     
         }
      
         public bool AdicionarJogador(Jogador jogador)

@@ -6,7 +6,7 @@ namespace Domain
 {
     public sealed class CampeonatoBrasileirao : ICampeonato
     {
-        private List<Time> times { get; set; }
+        private List<Time> times { get; set; } = new List<Time>();
         public IReadOnlyCollection<Time> Times => times;
         private bool inicioCampeonato = false;
         private int nRodada = 1;
