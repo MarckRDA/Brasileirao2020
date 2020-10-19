@@ -70,11 +70,11 @@ namespace Domain
         public List<string> ApresentarTabela(Usuario usuario)
         {
             var listaTabelaDeClassificacao = new List<string>();
-            times.OrderByDescending(time => time.Pontuacao);
+            times.OrderByDescending(time => time.Tabela.Pontuacao);
 
             foreach (var time in times)
             {
-                listaTabelaDeClassificacao.Add(time.ToString());
+                listaTabelaDeClassificacao.Add(time.Tabela.ToString());
             }
 
             return listaTabelaDeClassificacao;
@@ -161,18 +161,18 @@ namespace Domain
                     if (timeAnfitriaoGols > timeVisitanteGols)
                     {
                         GeradorJogadoresGoleadores(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timeAnfitriaoGols);
-                        timesEmPartida.TimeAnfitriao.MarcarVitoria();
-                        timesEmPartida.TimeAnfitriao.MarcarPontuacao();
-                        timesEmPartida.TimeVisitante.MarcarDerrota();
+                        timesEmPartida.TimeAnfitriao.Tabela.MarcarVitoria();
+                        timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
+                        timesEmPartida.TimeVisitante.Tabela.MarcarDerrota();
                         rodada.AdicionarPartida(timesEmPartida);
                         rodadas.Add(rodada);
                     }
                     else if (timeAnfitriaoGols < timeVisitanteGols)
                     {
                         GeradorJogadoresGoleadores(timesEmPartida.TimeVisitante, timesEmPartida.TimeAnfitriao, timeVisitanteGols);
-                        timesEmPartida.TimeAnfitriao.MarcarDerrota();
-                        timesEmPartida.TimeVisitante.MarcarVitoria();
-                        timesEmPartida.TimeVisitante.MarcarPontuacao();
+                        timesEmPartida.TimeAnfitriao.Tabela.MarcarDerrota();
+                        timesEmPartida.TimeVisitante.Tabela.MarcarVitoria();
+                        timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
                         rodada.AdicionarPartida(timesEmPartida);
                         rodadas.Add(rodada);
                     }
@@ -180,14 +180,14 @@ namespace Domain
                     {
                         for (int j = 0; j < timeAnfitriaoGols; j++)
                         {
-                            timesEmPartida.TimeAnfitriao.MarcarGolsPro();
-                            timesEmPartida.TimeVisitante.MarcarGolsPro();
+                            timesEmPartida.TimeAnfitriao.Tabela.MarcarGolsPro();
+                            timesEmPartida.TimeVisitante.Tabela.MarcarGolsPro();
                         }
 
-                        timesEmPartida.TimeAnfitriao.MarcarEmpate();
-                        timesEmPartida.TimeAnfitriao.MarcarPontuacao();
-                        timesEmPartida.TimeVisitante.MarcarEmpate();
-                        timesEmPartida.TimeVisitante.MarcarPontuacao();
+                        timesEmPartida.TimeAnfitriao.Tabela.MarcarEmpate();
+                        timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
+                        timesEmPartida.TimeVisitante.Tabela.MarcarEmpate();
+                        timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
                         rodada.AdicionarPartida(timesEmPartida);
                         rodadas.Add(rodada);
                     }
@@ -325,12 +325,12 @@ namespace Domain
 
                 if (jogadorGoleador.Nome == "Gol Contra")
                 {
-                    timePerdedor.MarcarGolsPro();
-                    timeVencedor.MarcarGolsContra();
+                    timePerdedor.Tabela.MarcarGolsPro();
+                    timeVencedor.Tabela.MarcarGolsContra();
                     continue;
                 }
 
-                times.Find(i => i.Id == idTime).MarcarGolsPro();
+                times.Find(i => i.Id == idTime).Tabela.MarcarGolsPro();
                 times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
             }
 
