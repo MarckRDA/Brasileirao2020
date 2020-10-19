@@ -9,7 +9,7 @@ namespace Tests
         public void Should_Create_A_JogadorTime()
         {
             //Given
-            Jogador marcos = new JogadorTime("Marcos");
+            IJogador marcos = new JogadorTime("Marcos");
 
             Assert.NotNull(marcos);
         }
@@ -18,25 +18,25 @@ namespace Tests
         public void Should_Put_One_Point_In_JogadorTime()
         {
             //Given
-            Jogador anderson = new JogadorTime("Anderson");
+            IJogador anderson = new JogadorTime("Anderson");
 
             //When
             anderson.MarcarGol();
 
             //Then
-            Assert.Equal(1, anderson.Gol);
+            Assert.Equal(1, anderson.MostrarGols());
         }
 
         [Fact]
         public void Shoud_Create_Two_Different_JogadoresTime_And_Compare_Their_ID()
         {
             //Given
-            Jogador anderson = new JogadorTime("Anderson");
-            Jogador fabio = new JogadorTime("Fábio");
+            IJogador anderson = new JogadorTime("Anderson");
+            IJogador fabio = new JogadorTime("Fábio");
                         
             //When
-            var idAnderson = anderson.Id;
-            var idFabio = fabio.Id;
+            var idAnderson = anderson.MostrarID();
+            var idFabio = fabio.MostrarID();
 
             //Then
             Assert.NotEqual(idAnderson,idFabio);

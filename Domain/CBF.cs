@@ -1,8 +1,9 @@
 namespace Domain
 {
-    public sealed class CBF : Usuario
+    public sealed class CBF : IUsuario
     {
-        public CBF (string nome) : base (nome)
+        public string Nome { get; private set; }
+        public CBF (string nome)
         {
             Nome = nome;
         }

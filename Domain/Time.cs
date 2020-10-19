@@ -7,8 +7,8 @@ namespace Domain
     {
         public Guid Id { get; private set; } = new Guid();
         public string NomeTime {get; private set;}
-        private List<Jogador> jogadores { get; set;} = new List<Jogador>();
-        public IReadOnlyCollection<Jogador> Jogadores => jogadores;
+        private List<IJogador> jogadores { get; set;} = new List<IJogador>();
+        public IReadOnlyCollection<IJogador> Jogadores => jogadores;
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
         public int Vitorias { get; private set; } 
@@ -23,7 +23,7 @@ namespace Domain
         protected Time(string nomeTime)
         {
             NomeTime = nomeTime;
-            jogadores = new List<Jogador>();
+            jogadores = new List<IJogador>();
             Id = Guid.NewGuid();        
         }
 
@@ -78,7 +78,7 @@ namespace Domain
             }
         }
 
-        public bool AdicionarJogador(Jogador jogador)
+        public bool AdicionarJogador(IJogador jogador)
         {
             if (jogadores.Count < 16 && jogadores.Count > 32 )
             {
@@ -88,7 +88,7 @@ namespace Domain
             return true;
         }
 
-        public bool RemoverJogador(Jogador jogador)
+        public bool RemoverJogador(IJogador jogador)
         {
             if (jogadores.Count < 16 && jogadores.Count > 32 )
             {

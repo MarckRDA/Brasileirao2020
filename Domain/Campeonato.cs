@@ -28,7 +28,7 @@ namespace Domain
 
 
         // *<------------------- Metodos de operações externas a classe --------------------------->
-        public void CadastrarTimes(Usuario usuario, List<Time> times)
+        public void CadastrarTimes(IUsuario usuario, List<Time> times)
         {
             if (!(usuario is CBF))
             {
@@ -50,7 +50,7 @@ namespace Domain
             inicioCampeonato = true;
         }
 
-        public bool RemoverJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
+        public bool RemoverJogadorTime(IUsuario usuario, Guid idTime, IJogador jogador)
         {
             if (!(usuario is CBF))
             {
@@ -59,7 +59,7 @@ namespace Domain
             return times.FirstOrDefault(time => time.Id == idTime).RemoverJogador(jogador);
         }
 
-        public bool AdicionarJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
+        public bool AdicionarJogadorTime(IUsuario usuario, Guid idTime, IJogador jogador)
         {
             if (!(usuario is CBF))
             {
@@ -68,7 +68,7 @@ namespace Domain
             return times.FirstOrDefault(time => time.Id == idTime).AdicionarJogador(jogador);
         }
 
-        public List<string> ApresentarTabela(Usuario usuario)
+        public List<string> ApresentarTabela(IUsuario usuario)
         {
             var listaTabelaDeClassificacao = new List<string>();
             times.OrderByDescending(time => time.Pontuacao);
@@ -81,9 +81,9 @@ namespace Domain
             return listaTabelaDeClassificacao;
         }
 
-        public List<string> ExibirTimesClassificadosLibertadores(Usuario usuario) => ApresentarTabela(usuario).Take(4).ToList();
+        public List<string> ExibirTimesClassificadosLibertadores(IUsuario usuario) => ApresentarTabela(usuario).Take(4).ToList();
 
-        public List<string> ExibirTimesRebaixados(Usuario usuario)
+        public List<string> ExibirTimesRebaixados(IUsuario usuario)
         {
             var rebaixados = new List<string>();
 
@@ -107,11 +107,11 @@ namespace Domain
             {
                 for (int j = 0; j < times.ElementAt(i).Jogadores.Count; j++)
                 {
-                    listaDeGolsTime.Add(times.ElementAt(i).Jogadores.ElementAt(j).Gol);
+                    listaDeGolsTime.Add(times.ElementAt(i).Jogadores.ElementAt(j).MostrarGols());
                 }
 
                 qtdGolsJogadorGoleador = listaDeGolsTime.Max();
-                nomeJogadorGoleador = times.ElementAt(i).Jogadores.FirstOrDefault(x => x.Gol == qtdGolsJogadorGoleador).Nome;
+                nomeJogadorGoleador = times.ElementAt(i).Jogadores.FirstOrDefault(x => x.MostrarGols() == qtdGolsJogadorGoleador).MostrarNome();
 
                 jogadorArtilheiro.AdicionarNomeJogador(nomeJogadorGoleador);
                 jogadorArtilheiro.AdicionarGols(qtdGolsJogadorGoleador);
@@ -121,13 +121,13 @@ namespace Domain
                 listaDeGolsTime.Clear();
             }
 
-            jogadoresArtilheiros.OrderByDescending(jogador => jogador.Gol);
-            tabelaArtilheiros = jogadoresArtilheiros.Select((jogadorArtilheiro, index) => $"{index + 1} {jogadorArtilheiro.Nome} - Gols: {jogadorArtilheiro.Gol} - Time: {jogadorArtilheiro.NomeTime}").ToList();
+            jogadoresArtilheiros.OrderByDescending(jogador => jogador.MostrarGols());
+            tabelaArtilheiros = jogadoresArtilheiros.Select((jogadorArtilheiro, index) => $"{index + 1} {jogadorArtilheiro.MostrarNome()} - Gols: {jogadorArtilheiro.MostrarGols()} - Time: {jogadorArtilheiro.NomeTime}").ToList();
 
             return tabelaArtilheiros;
         }
 
-        public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas)
+        public List<string> ExibirResultadoDaRodada(IUsuario usuario, int qtdRodadas)
         {
             GerarRodada(qtdRodadas); // !Buscará a partir da prorpiedade Rodadas da classe campeonato;
             var listaResultados = new List<string>();
@@ -324,7 +324,7 @@ namespace Domain
                 var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
                 var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
 
-                if (jogadorGoleador.Nome == "Gol Contra")
+                if (jogadorGoleador.MostrarNome() == "Gol Contra")
                 {
                     timePerdedor.MarcarGolsPro();
                     timeVencedor.MarcarGolsContra();
