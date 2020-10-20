@@ -228,9 +228,172 @@ namespace Tests
              };
              return timeBragantino;
         }
+         public List<Jogador> GeradorDeJogadoresCeara()
+        {
 
 
 
+           List<Jogador> timeCeara = new List<Jogador>() 
+           {
+             new JogadorTime("Fernando Prass"),
+             new JogadorTime("Fabinho"),
+             new JogadorTime("Tiago"),
+             new JogadorTime("Eduardo Brock"),
+             new JogadorTime("Bruno Pacheco"),
+             new JogadorTime("Pedro Naressi"),
+             new JogadorTime("Leandro Carvalho"),
+             new JogadorTime("Charles"),
+             new JogadorTime("Fernando Sobral"),
+             new JogadorTime("Vinicius"),
+             new JogadorTime("Lima"),
+             new JogadorTime("Leo Chu"),
+             new JogadorTime("Kelvyn"),
+             new JogadorTime("Rafael Sobis"),
+             new JogadorTime("Cleber"),
+             new JogadorTime("Diogo Silva"),
+             new JogadorTime("Gabriel Lacerda"),
+             new JogadorTime("Alyson"),
+             new JogadorTime("Marthã"),
+             new JogadorTime("Felipe Baixola"),
+             new JogadorTime("Wescley"),
+             new JogadorTime("Mateus Goncalves"),
+            };
+            return timeCeara;
+        }
+          public List<Jogador> GeradorDeJogadoresCorintians()
+        {
+           List<Jogador> timeCorintians = new List<Jogador>() 
+           {
+               new JogadorTime("Cassio"),
+               new JogadorTime("Fagner"),
+               new JogadorTime("Marllon"),
+               new JogadorTime("Gil"),
+               new JogadorTime("Lucas Piton"),
+               new JogadorTime("Xavier"),
+               new JogadorTime("Camacho"),
+               new JogadorTime("Gabriel"),
+               new JogadorTime("Otero"),
+               new JogadorTime("Gustavo Mantuan"),
+               new JogadorTime("Mateus Vital"),
+               new JogadorTime("Cazares"),
+               new JogadorTime("Everaldo"),
+               new JogadorTime("Gustavo Mosquito"),
+               new JogadorTime("Boselli"),
+               new JogadorTime("Luan"),
+               new JogadorTime("Walter"),
+               new JogadorTime("Michel Macedo"),
+               new JogadorTime("Sidcley"),
+               new JogadorTime("Éderson"),
+               new JogadorTime("Cantillo"),
+               new JogadorTime("Roni"),
+               new JogadorTime("Leo Natel"),
+               new JogadorTime("Jô"),
+           };
+           return timeCorintians;
+        }
+         public List<Jogador> GeradorDeJogadoresCoritiba()
+        {
 
+           List<Jogador> timeCoritiba = new List<Jogador>()
+          {
+            new JogadorTime("Wilson"),
+            new JogadorTime("Natanael"),
+            new JogadorTime("Matheus Galdezani"),
+            new JogadorTime("Hanrique Vermudt"),
+            new JogadorTime("Nathan Silva"),
+            new JogadorTime("Willian Mateus"),
+            new JogadorTime("Matheus Salles"),
+            new JogadorTime("Matheus Bueno"),
+            new JogadorTime("Hugo Moura"),
+            new JogadorTime("Ricardo Oliveira"),
+            new JogadorTime("Yan Sasse"),
+            new JogadorTime("Nathan"),
+            new JogadorTime("Giovanni Augusto"),
+            new JogadorTime("Robson"),
+            new JogadorTime("Rodrigo Muniz"),
+            new JogadorTime("Neilton"),
+            new JogadorTime("Alex Muralha"),
+            new JogadorTime("Ramón Martinez"),
+            new JogadorTime("Sarrafiore"),
+            new JogadorTime("Gabriel"),
+            new JogadorTime("Luiz Henrique"),
+            new JogadorTime("Mattheus"),
+            new JogadorTime("Cerutti"),
+          };
+          return timeCoritiba;
+        }
+        public List<Jogador> GeradorDeJogadoresFlamengo()
+        {
+
+
+           List<Jogador> timeFlamengo = new List<Jogador>()
+           {
+             new JogadorTime("Hugo Souza"),
+             new JogadorTime("Diego Alves"),
+             new JogadorTime("Mauricio Isla"),
+             new JogadorTime("Rodrigo Caio"),
+             new JogadorTime("Gustavo Henrique"),
+             new JogadorTime("Natan"),
+             new JogadorTime("Gabriel Noga"),
+             new JogadorTime("Filipe Luis"),
+             new JogadorTime("Thiago Maia"),
+             new JogadorTime("Willian Arão"),
+             new JogadorTime("Gerson"),
+             new JogadorTime("Everton Ribeiro"),
+             new JogadorTime("Ramon"),
+             new JogadorTime("De Arrascaeta"),
+             new JogadorTime("Bruno Henrique"),
+             new JogadorTime("Pedro"),
+             new JogadorTime("Lincoln"),
+             new JogadorTime("Vitinho"),
+             new JogadorTime("Diego"),
+             new JogadorTime("Gabigol"),
+             new JogadorTime("Cézar"),
+             new JogadorTime("Gabriel Batista"),
+             new JogadorTime("Matheuzinho"),
+             new JogadorTime("João Lucas"),
+             new JogadorTime("Thuler"),
+             new JogadorTime("Léo Pereira"),
+             new JogadorTime("Renê"),
+             new JogadorTime("Gomes"),
+             new JogadorTime("Pepe"),
+             new JogadorTime("Pedro Rocha"),
+             new JogadorTime("Michael"),
+           };
+           return timeFlamengo;
+        }
+         public List<Jogador> GeradorDeJogadoresFluminense()
+        {
+
+
+
+           List<Jogador> timeFluminense = new List<Jogador>()
+           {
+            new JogadorTime("Muriel Becker"),
+            new JogadorTime("Igor Julião"),
+            new JogadorTime("Nino"),
+            new JogadorTime("Digão"),
+            new JogadorTime("Danilo Barcelos"),
+            new JogadorTime("Hudson"),
+            new JogadorTime("Caio Paulista"),
+            new JogadorTime("Dodi"),
+            new JogadorTime("Nenê"),
+            new JogadorTime("Ganso"),
+            new JogadorTime("Yago Felipe"),
+            new JogadorTime("André"),
+            new JogadorTime("Felippe Cardoso"),
+            new JogadorTime("Luiz Henrique"),
+            new JogadorTime("Marcos Paulo"),
+            new JogadorTime("Fred"),
+            new JogadorTime("Marcos Felipe"),
+            new JogadorTime("Callegari"),
+            new JogadorTime("Matheus Ferraz"),
+            new JogadorTime("Luccas Claro"),
+            new JogadorTime("Egidio"),
+            new JogadorTime("Miguel"),
+            new JogadorTime("Lucca"),           
+            };
+            return timeFluminense;
+        }
     }
 }    
