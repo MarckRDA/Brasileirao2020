@@ -20,7 +20,7 @@ namespace Domain
      
         public bool AdicionarJogador(Jogador jogador)
         {
-            if (jogadores.Count < 16 && jogadores.Count > 32 )
+            if (jogadores.Count > 32 )
             {
                 return false;
             }
@@ -30,7 +30,7 @@ namespace Domain
 
         public bool RemoverJogador(Jogador jogador)
         {
-            if (jogadores.Count < 16 && jogadores.Count > 32 )
+            if (jogadores.Count < 16)
             {
                 return false;
             }
@@ -41,7 +41,7 @@ namespace Domain
 
         public bool AdicionarListaDeJogadores(List<Jogador> jogadores)
         {
-            if (jogadores.Count < 16 && jogadores.Count > 32 )
+            if (jogadores.Count < 16 || jogadores.Count > 32 )
             {
                 return false;
             }

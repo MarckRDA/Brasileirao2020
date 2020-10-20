@@ -12,7 +12,7 @@ namespace Domain
         public List<string> ApresentarTabela(Usuario usuario);
         public List<string> ExibirTimesClassificadosLibertadores(Usuario usuario); 
         public List<string> ExibirTimesRebaixados(Usuario usuario);
-        public List<string> ExibirClassificacaoDeArtilheiros();
+        public List<string> ExibirClassificacaoDeArtilheiros(Usuario usuario);
         public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas);
         
 

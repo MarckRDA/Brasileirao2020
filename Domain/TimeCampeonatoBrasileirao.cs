@@ -1,3 +1,5 @@
+using System;
+
 namespace Domain
 {
     public sealed class TimeCampeonatoBrasileirao : Time

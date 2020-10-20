@@ -4,7 +4,6 @@ namespace Domain
 {
     public abstract class TabelaDeEstatisticaTime 
     {
-        public Time Time {get; set;}
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
         public int Vitorias { get; private set; } 
@@ -17,7 +16,7 @@ namespace Domain
         public double PercentagemAproveitamento { get; private set;}
 
       
-
+       
         
         public void DisputarPartida()
         {
@@ -74,7 +73,7 @@ namespace Domain
 
         public override string ToString()
         {
-            return $"{Time.NomeTime} | {Pontuacao} | {PartidasDisputadas} | {Vitorias} | {Empate} | {Derrotas} | {GolsPro} | {GolsContra} | {Math.Round(PercentagemAproveitamento, 2)}%";
+            return $"{Pontuacao} | {PartidasDisputadas} | {Vitorias} | {Empate} | {Derrotas} | {GolsPro} | {GolsContra} | {Math.Round(PercentagemAproveitamento, 2)}%";
         }
 
     }
