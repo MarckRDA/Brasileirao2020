@@ -146,7 +146,7 @@ namespace Domain
             jogadoresArtilheiros.OrderByDescending(jogador => jogador.Gol);
             tabelaArtilheiros = jogadoresArtilheiros.Select((jogadorArtilheiro, index) => $"{index + 1} {jogadorArtilheiro.Nome} - Gols: {jogadorArtilheiro.Gol} - Time: {jogadorArtilheiro.NomeTime}").ToList();
 
-            return tabelaArtilheiros;
+            return tabelaArtilheiros.Take(5).ToList();
         }
 
         public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas = 1)
@@ -262,7 +262,9 @@ namespace Domain
                         for (int j = 0; j < timeAnfitriaoGols; j++)
                         {
                             timesEmPartida.TimeAnfitriao.Tabela.MarcarGolsPro();
+                            timesEmPartida.TimeAnfitriao.Tabela.MarcarGolsContra();
                             timesEmPartida.TimeVisitante.Tabela.MarcarGolsPro();
+                            timesEmPartida.TimeVisitante.Tabela.MarcarGolsContra();
                         }
 
                         timesEmPartida.TimeAnfitriao.Tabela.MarcarEmpate();

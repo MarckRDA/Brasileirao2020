@@ -1,12 +1,133 @@
 using System.Collections.Generic;
 using Domain;
+using Xunit;
 
 namespace Tests
 {
     public class CampeonatoBrasileiraoTests
     {
 
+        [Fact]
+        public void Deve_Retornar_Falso_Ao_Tentar_Inscrever_Times_Com_Usuário_Torcedor()
+        {
+            //TODO
+        }
 
+        [Fact]
+        public void Deve_Retornar_Falso_Ao_Tentar_Inscrever_Menos_De_Sete_Times_No_Campeonato()
+        {
+            //TODO
+        }
+
+        [Fact]
+        public void Deve_Retornar_Falso_Ao_Tentar_Inscrever_Times_No_Campeonato_Depois_Dele_Ter_Começado()
+        {
+            //TODO
+            //Given
+        
+            //When
+        
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Falso_Ao_Tentar_Remover_Um_Jogador_Com_Usuario_Torcedor()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Falso_Ao_Tentar_Adicionar_Um_Jogador_Com_Usuario_Torcedor()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Verdadeiro_Ao_Tentar_Remover_Um_Jogador_Com_Usuario_CBF()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Verdadeiro_Ao_Tentar_Adicionar_Um_Jogador_Com_Usuario_CBF()
+        {
+            //TODO
+        //Given
+        
+        //When
+        
+        //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Resultado_Da_Rodada()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_A_Relacao_Dos_Artilheiros()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_A_Tabela_De_Pontos_Corridos()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Os_Times_Rebaixados()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
+
+        [Fact]
+        public void Deve_Retornar_Os_Times_Classificados_Para_A_Libertadores()
+        {
+            //TODO
+            //Given
+            
+            //When
+            
+            //Then
+        }
 
 
         //* Mocks
