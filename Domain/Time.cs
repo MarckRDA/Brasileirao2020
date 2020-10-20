@@ -38,5 +38,16 @@ namespace Domain
             jogadores.Remove(jogador);
             return true;
         }
+
+        public bool AdicionarListaDeJogadores(List<Jogador> jogadores)
+        {
+            if (jogadores.Count < 16 && jogadores.Count > 32 )
+            {
+                return false;
+            }
+
+            this.jogadores = jogadores;
+            return true;
+        }
     }
 }
