@@ -11,7 +11,7 @@ namespace Domain
         public IReadOnlyCollection<Jogador> Jogadores => jogadores;
         public TabelaDeEstatisticaTime Tabela{get; set;}
      
-        protected Time(string nomeTime)
+        public Time(string nomeTime)
         {
             NomeTime = nomeTime;
             jogadores = new List<Jogador>();
