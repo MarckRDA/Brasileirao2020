@@ -395,5 +395,289 @@ namespace Tests
             };
             return timeFluminense;
         }
+         public List<Jogador> GeradorDeJogadoresFortaleza()
+        {
+
+           List<Jogador> timeFortaleza = new List<Jogador>()
+           {
+               new JogadorTime("Felipe Alves"),
+               new JogadorTime("Max Walef"),
+               new JogadorTime("Tinga"),
+               new JogadorTime("Gabriel Dias"),
+               new JogadorTime("Paulão"),
+               new JogadorTime("Roger Carvalho"),
+               new JogadorTime("Bruno Melo"),
+               new JogadorTime("felipe"),
+               new JogadorTime("Marlon"),
+               new JogadorTime("Ronald"),
+               new JogadorTime("Romarinho"),
+               new JogadorTime("Osvaldo"),
+               new JogadorTime("Carlinhos"),
+               new JogadorTime("David"),
+               new JogadorTime("Juninho"),
+               new JogadorTime("Yuri Cesar"),
+               new JogadorTime("Wellington Paulista"),
+               new JogadorTime("Jackson"),
+               new JogadorTime("Derley"),
+               new JogadorTime("Mariano Vazquez"),
+               new JogadorTime("Bergson"),
+               new JogadorTime("Igor Torres"),
+               new JogadorTime("Éderson"),
+           };
+           return timeFortaleza;
+        }
+         public List<Jogador> GeradorDeJogadoresGoias()
+        {
+           List<Jogador> timeGoias = new List<Jogador>()
+           {
+             new JogadorTime("Tadeu"),
+             new JogadorTime("Edilson"),
+             new JogadorTime("David Duarte"),
+             new JogadorTime("Fábio Sanches"),
+             new JogadorTime("Caju"),
+             new JogadorTime("Breno"),
+             new JogadorTime("Ariel Cabral"),
+             new JogadorTime("Daniel Bessa"),
+             new JogadorTime("Douglas Baggio"),
+             new JogadorTime("Shaylon"),
+             new JogadorTime("Fernandão"),
+             new JogadorTime("Keko"),
+             new JogadorTime("Ratinho"),
+             new JogadorTime("Vinicius"),
+             new JogadorTime("Matheus Alves"),
+             new JogadorTime("Pintado"),
+             new JogadorTime("Iago Mendonça"),
+             new JogadorTime("Heron"),
+             new JogadorTime("Jefferson"),
+             new JogadorTime("Daniel Oliveira"),
+             new JogadorTime("Salazar"),
+             new JogadorTime("Sandrinho"),
+           };
+           return timeGoias;
+        }
+         public List<Jogador> GeradorDeJogadoresGremio()
+        {
+
+           List<Jogador> timeGremio = new List<Jogador>()
+           {
+             new TimeJogador("Vanderlei"),
+             new TimeJogador("Orejuela"),
+             new TimeJogador("Pedro Geromel"),
+             new TimeJogador("Kannemann"),
+             new TimeJogador("Bruno Cortez"),
+             new TimeJogador("Matheus Henrique"),
+             new TimeJogador("Maicon"),
+             new TimeJogador("Jean Pyerre"),
+             new TimeJogador("Alison"),
+             new TimeJogador("Thaciano"),
+             new TimeJogador("Isaque"),
+             new TimeJogador("lucas Silva"),
+             new TimeJogador("Luiz Fernando"),
+             new TimeJogador("Ferreira"),
+             new TimeJogador("Pepê"),
+             new TimeJogador("Paulo Victor"),
+             new TimeJogador("Victor Ferraz"),
+             new TimeJogador("David Braz"),
+             new TimeJogador("Rodrigues"),
+             new TimeJogador("Diogo Barbosa"),
+             new TimeJogador("Everton"),
+             new TimeJogador("Robinho"),
+             new TimeJogador("Guilherme Azevedo"),
+             new TimeJogador("Diego Souza"),
+           };
+           return timeGremio;
+        }
+         public List<Jogador> GeradorDeJogadoresInternacional()
+        {
+           List<Jogador> timeInternacional = new List<Jogador>()
+           {
+             new TimeJogador("Marcelo Lomba"),
+             new TimeJogador("Rodinei"),
+             new TimeJogador("Zé Gabriel"),
+             new TimeJogador("Victor Cuesta"),
+             new TimeJogador("Uendel"),
+             new TimeJogador("Rodrigo Lindoso"),
+             new TimeJogador("Praxedes"),
+             new TimeJogador("Edenilson"),
+             new TimeJogador("Marcos Guilherme"),
+             new TimeJogador("Rodrigo Moledo"),
+             new TimeJogador("Patrick"),
+             new TimeJogador("Rodrigo Dourado"),
+             new TimeJogador("Thiago Galhardo"),
+             new TimeJogador("D'alessandro"),
+             new TimeJogador("Abel Hernandez"),
+             new TimeJogador("Yuri Alberto"),
+             new TimeJogador("Danilo Fernandes"),
+             new TimeJogador("Mazetti"),
+             new TimeJogador("Moisés"),
+             new TimeJogador("Peglow"),
+             new TimeJogador("Nonato"),
+             new TimeJogador("William Pottker"),
+             new TimeJogador("Leandro Fernandez"), 
+           };
+           return timeInternacional;
+        }
+         public List<Jogador> GeradorDeJogadoresPalmeiras()
+        {
+           List<Jogador> timePalmeiras = new List<Jogador>()
+           {
+             new TimeJogador("Weverton"),
+             new TimeJogador("Mayke"),
+             new TimeJogador("Wesley"),
+             new TimeJogador("Emerson Santos"),
+             new TimeJogador("Gustavo Gomez"),
+             new TimeJogador("Vinã"),
+             new TimeJogador("Gabriel Menino"),
+             new TimeJogador("Patrick de Paula"),
+             new TimeJogador("Willian Bigode"),
+             new TimeJogador("Zé Rafael"),
+             new TimeJogador("Raphael Veiga"),
+             new TimeJogador("Danilo"),
+             new TimeJogador("Lucas Lima"),
+             new TimeJogador("luiz Adriano"),
+             new TimeJogador("Gabriel Veron"),
+             new TimeJogador("Jailson"),
+             new TimeJogador("Vinicius Silvestre"),
+             new TimeJogador("Renan"),
+             new TimeJogador("Ramires"),
+             new TimeJogador("Gustavo Scarpa"),
+             new TimeJogador("Rony"),
+           };
+           return timePalmeiras;
+        }
+        public List<Jogador> GeradorDeJogadoresSantos()
+        {
+           List<Jogador> timeSantos = new List<Jogador>()
+           {
+             new TimeJogador("João Paulo"),
+             new TimeJogador("Madson"),
+             new TimeJogador("Laércio"),
+             new TimeJogador("Luan Peres"),
+             new TimeJogador("Felipe Jonatan"),
+             new TimeJogador("Jobson"),
+             new TimeJogador("Sandry"),
+             new TimeJogador("Diego Pituca"),
+             new TimeJogador("Jean Mota"),
+             new TimeJogador("Lucas Lourenço"),
+             new TimeJogador("Lucas Braga"),
+             new TimeJogador("Arthur Gomes"),
+             new TimeJogador("Kaio Jorge"),
+             new TimeJogador("Luiz Felipe"),
+             new TimeJogador("Soteldo"),
+             new TimeJogador("Wagner Leonardo"),
+             new TimeJogador("John Victor"),
+             new TimeJogador("Alex"),
+             new TimeJogador("Ivonei"),
+             new TimeJogador("Anderson Ceará"),
+             new TimeJogador("Marcos Leonardo"),
+             new TimeJogador("Tailson"),
+            }; 
+            return timeSantos;
+        }
+         public List<Jogador> GeradorDeJogadoresSaoPaulo()
+        {
+           List<Jogador> timeSaoPaulo = new List<Jogador>()
+           {
+             new TimeJogador("Tiago Volpi"),
+             new TimeJogador("Daniel Alves"),
+             new TimeJogador("Diego"),
+             new TimeJogador("Bruno Alves"),
+             new TimeJogador("Reinaldo"),
+             new TimeJogador("Luan"),
+             new TimeJogador("Tchê Tchê"),
+             new TimeJogador("Gabriel Sara"),
+             new TimeJogador("Toró"),
+             new TimeJogador("Igor Gomes"),
+             new TimeJogador("Vitor Bueno"),
+             new TimeJogador("Brenner"),
+             new TimeJogador("Paulinho Boia"),
+             new TimeJogador("Luciano"),
+             new TimeJogador("Santiago Tréllez"),
+             new TimeJogador("Thiago Couto"),
+             new TimeJogador("Júnior"),
+             new TimeJogador("Rodrigo Freitas"),
+             new TimeJogador("Léo"),
+             new TimeJogador("Rodrigo Nestor"),
+             new TimeJogador("Pablo"),
+             new TimeJogador("Gonzalo Carneiro"),
+             new TimeJogador("Hernanes"),
+             new TimeJogador("Liziero"),
+             new TimeJogador("Juanfran"),
+             new TimeJogador("Lucas Perri"),
+             new TimeJogador("Igor Vinicius"),
+             new TimeJogador("Rojas"),
+             new TimeJogador("Walce"),
+           };
+           return timeSaoPaulo;
+        }
+         public List<Jogador> GeradorDeJogadoresSport()
+        {
+           List<Jogador> timeSport = new List<Jogador>()
+           {
+             new TimeJogador("Luan Polli"),
+             new TimeJogador("Patric"),
+             new TimeJogador("Iago Maidana"),
+             new TimeJogador("Adryelson"),
+             new TimeJogador("Luciano Juba"),
+             new TimeJogador("Marcão Silva"),
+             new TimeJogador("Ronaldo Henrique"),
+             new TimeJogador("Ricardinho"),
+             new TimeJogador("Mikael"),
+             new TimeJogador("Lucas Mugni"),
+             new TimeJogador("Thiago Neves"),
+             new TimeJogador("Jonathan Gomez"),
+             new TimeJogador("Marquinhos"),
+             new TimeJogador("Rogério"),
+             new TimeJogador("Leandro Barcia"),
+             new TimeJogador("Junior Tavares"),
+             new TimeJogador("Mailson"),
+             new TimeJogador("Ewerthon"),
+             new TimeJogador("Rafael Thyere"),
+             new TimeJogador("Chico"),
+             new TimeJogador("Márcio Araujo"),
+             new TimeJogador("Hernane Brocador"),
+           };
+           return timeSport;
+        }
+         public List<Jogador> GeradorDeJogadoresVasco()
+        {
+           List<Jogador> timeVasco = new List<Jogador>()
+           {
+             new TimeJogador("Fernando Miguel"),
+             new TimeJogador("Yago Pikachu"),
+             new TimeJogador("Miranda"),
+             new TimeJogador("Leandro Castan"),
+             new TimeJogador("Henrique"),
+             new TimeJogador("Andrey"),
+             new TimeJogador("Felipe Bastos"),
+             new TimeJogador("Marcos Junior"),
+             new TimeJogador("Guilherme Parede"),
+             new TimeJogador("Carlinhos"),
+             new TimeJogador("Benitez"),
+             new TimeJogador("Vinícius"),
+             new TimeJogador("Tales Magno"),
+             new TimeJogador("German Cano"),
+             new TimeJogador("Lucão"),
+             new TimeJogador("Ulisses"),
+             new TimeJogador("Werley"),
+             new TimeJogador("Neto Borges"),
+             new TimeJogador("Gabriel Pec"),
+             new TimeJogador("Lucas Santos"),
+             new TimeJogador("Ribamar"),
+             new TimeJogador("Tiago Reis"),
+             new TimeJogador("Ygor Catatau"),
+             new TimeJogador("Ricardo Graça"),
+             new TimeJogador("Bruno Gomes"),
+             
+
+           };
+        }
+
+
+
+
+
+
+
     }
 }    
