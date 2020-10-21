@@ -4,9 +4,7 @@ namespace Domain
     {
         public ICampeonato CriarCampeonato()
         {
-            return new CampeonatoBrasileirao(new PartidaCampeonatoBrasileirao(), 
-                                            new RodadaCampeonatoBrasileirao(),
-                                            new JogadorArtilheiroCampeonatoBrasileirao());
+            return new CampeonatoBrasileirao();
         }
     }
 }

@@ -9,22 +9,16 @@ namespace Domain
         private List<Time> times { get; set; } = new List<Time>();
         public IReadOnlyCollection<Time> Times => times;
         private bool inicioCampeonato = false;
-        private int nRodada = 1;
-        private List<JogadorArtilheiro> jogadoresArtilheiros = new List<JogadorArtilheiro>();
+        private int nRodada = 0;
         private List<Partida> partidas = new List<Partida>(); // !!Ponto de atenção; Para plano de contingência apagar essa linha
         private List<Rodada> rodadas = new List<Rodada>(); // ! Ponto de atenção; Para plano de contingência apagar essa linha
         private Partida partida; // ! Criado só para criar o tipo de partida fazendo injeção de dependencia; Para plano de contingência apagar essa linha
-        private Rodada rodada; // ! ! Criado só para criar o tipo de Rodada fazendo injeção de dependencia; Para plano de contingência apagar essa linha
-        private JogadorArtilheiro jogadorArtilheiro;
+        private Rodada rodada = new RodadaCampeonatoBrasileirao(); // ! ! Criado só para criar o tipo de Rodada fazendo injeção de dependencia; Para plano de contingência apagar essa linha
+    
 
 
         // ! Se der merda, para plano de contingência apagar essa linha
-        public CampeonatoBrasileirao(Partida tipoDePartida, Rodada tipoDeRodada, JogadorArtilheiro tipoJogadorArtilheiro)
-        {
-            partida = tipoDePartida;
-            rodada = tipoDeRodada;
-            jogadorArtilheiro = tipoJogadorArtilheiro;
-        }
+        
 
         // *<------------------- Metodos de operações externas a classe --------------------------->
         public void CadastrarTimes(Usuario usuario, List<Time> times)
@@ -52,6 +46,8 @@ namespace Domain
             inicioCampeonato = true;
         }
 
+        public IReadOnlyCollection<Time> ObterListaTimes() => Times;
+
         public bool RemoverJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
         {
             if (!(usuario is CBF))
@@ -78,9 +74,9 @@ namespace Domain
             }
 
             var listaTabelaDeClassificacao = new List<string>();
-            times.OrderByDescending(time => time.Tabela.Pontuacao);
+            var timesOrdenador = times.OrderByDescending(time => time.Tabela.Pontuacao);
 
-            foreach (var time in times)
+            foreach (var time in timesOrdenador)
             {
                 listaTabelaDeClassificacao.Add($"{time.NomeTime} | " + time.Tabela.ToString());
             }
@@ -105,14 +101,7 @@ namespace Domain
                 return null;
             }
 
-            var rebaixados = new List<string>();
-
-            for (int i = -4; i < 0; i++)
-            {
-                rebaixados.Add(ApresentarTabela(usuario)[i]);
-            }
-
-            return rebaixados;
+            return ApresentarTabela(usuario).TakeLast(4).ToList();
         }
 
         public List<string> ExibirClassificacaoDeArtilheiros(Usuario usuario)
@@ -121,35 +110,18 @@ namespace Domain
             {
                 return null;
             }
-
-            var listaDeGolsTime = new List<int>();
-            var jogadoresArtilheiros = new List<JogadorArtilheiro>();
-            var tabelaArtilheiros = new List<string>();
-            var nomeJogadorGoleador = "";
-            var qtdGolsJogadorGoleador = 0;
+            var jogadores = new List<Jogador>();
 
             for (int i = 0; i < times.Count; i++)
             {
-                for (int j = 0; j < times.ElementAt(i).Jogadores.Count; j++)
-                {
-                    listaDeGolsTime.Add(times.ElementAt(i).Jogadores.ElementAt(j).Gol);
-                }
-
-                qtdGolsJogadorGoleador = listaDeGolsTime.Max();
-                nomeJogadorGoleador = times.ElementAt(i).Jogadores.FirstOrDefault(x => x.Gol == qtdGolsJogadorGoleador).Nome;
-
-                jogadorArtilheiro.AdicionarNomeJogador(nomeJogadorGoleador);
-                jogadorArtilheiro.AdicionarGols(qtdGolsJogadorGoleador);
-                jogadorArtilheiro.AdicionarNomeTimeJogadorArtilheiro(times.ElementAt(i).NomeTime);
-
-                jogadoresArtilheiros.Add(jogadorArtilheiro);
-                listaDeGolsTime.Clear();
+                jogadores.AddRange(times[i].Jogadores.Select(x => x));
             }
 
-            jogadoresArtilheiros.OrderByDescending(jogador => jogador.Gol);
-            tabelaArtilheiros = jogadoresArtilheiros.Select((jogadorArtilheiro, index) => $"{index + 1} {jogadorArtilheiro.Nome} - Gols: {jogadorArtilheiro.Gol} - Time: {jogadorArtilheiro.NomeTime}").ToList();
+            var jogadoresArtilheiros = jogadores.OrderByDescending(x => x.Gol).ToList();
 
-            return tabelaArtilheiros.Take(5).ToList();
+            var jogadorArtilheiroFormatados = jogadoresArtilheiros.Select((x, i) => $"{i + 1} {x.Nome} - {x.Gol} Gols").Take(5).ToList();
+
+            return jogadorArtilheiroFormatados;
         }
 
         public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas = 1)
@@ -165,7 +137,7 @@ namespace Domain
             {
                 for (int j = 0; j < rodadas[i].Partidas.Count; j++)
                 {
-                    var resultadosAMostrar = $"Rodada {i + 1} Resultado: {rodadas[i].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[i].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[i].Partidas.ElementAt(j).GolsVisitante} {rodadas[i].Partidas.ElementAt(j).TimeVisitante.NomeTime}/n";
+                    var resultadosAMostrar = $"Rodada {i + 1} Resultado: {rodadas[i].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[i].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[i].Partidas.ElementAt(j).GolsVisitante} {rodadas[i].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
                     listaResultados.Add(resultadosAMostrar);
                 }
             }
@@ -173,68 +145,14 @@ namespace Domain
             return listaResultados;
         }
 
-        // *<------------------- Metodos de operações internas a classe --------------------------->
-        // ! Se der merda no teste, apagar esse método para plano de contigência
-        private void GerarRodada(int qtdRodadas)
-        {
-            while (qtdRodadas <= nRodada)
-            {
-                nRodada++;
-
-                GerarProximoConfronto();
-
-                for (int i = 0; i < partidas.Count; i++)
-                {
-                    var timeAnfitriaoGols = GeradorGols();
-                    var timeVisitanteGols = 6 - timeAnfitriaoGols;
-                    var timesEmPartida = partidas.ElementAt(i);
-
-                    if (timeAnfitriaoGols > timeVisitanteGols)
-                    {
-                        GeradorJogadoresGoleadores(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timeAnfitriaoGols);
-                        timesEmPartida.TimeAnfitriao.Tabela.MarcarVitoria();
-                        timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
-                        timesEmPartida.TimeVisitante.Tabela.MarcarDerrota();
-                        rodada.AdicionarPartida(timesEmPartida);
-                        rodadas.Add(rodada);
-                    }
-                    else if (timeAnfitriaoGols < timeVisitanteGols)
-                    {
-                        GeradorJogadoresGoleadores(timesEmPartida.TimeVisitante, timesEmPartida.TimeAnfitriao, timeVisitanteGols);
-                        timesEmPartida.TimeAnfitriao.Tabela.MarcarDerrota();
-                        timesEmPartida.TimeVisitante.Tabela.MarcarVitoria();
-                        timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
-                        rodada.AdicionarPartida(timesEmPartida);
-                        rodadas.Add(rodada);
-                    }
-                    else
-                    {
-                        for (int j = 0; j < timeAnfitriaoGols; j++)
-                        {
-                            timesEmPartida.TimeAnfitriao.Tabela.MarcarGolsPro();
-                            timesEmPartida.TimeVisitante.Tabela.MarcarGolsPro();
-                        }
-
-                        timesEmPartida.TimeAnfitriao.Tabela.MarcarEmpate();
-                        timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
-                        timesEmPartida.TimeVisitante.Tabela.MarcarEmpate();
-                        timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
-                        rodada.AdicionarPartida(timesEmPartida);
-                        rodadas.Add(rodada);
-                    }
-
-                }
-
-            }
-
-        }
-
+       
+        // *<------------------- Sistema Determinístico --------------------------->
         // ! Utilizando dados mocados para ter previsões nos testes
-        public void GerarRodadaMockada(int golsAnfitriao, int golsVisitante, bool golContra)
+        public void GerarRodadaMockada(int golsAnfitriao, int golsVisitante)
         {
             nRodada++;
 
-            GerarProximoConfrontoMocado();
+            GerarProximoConfrontoMocado(golsAnfitriao, golsVisitante);
 
             for (int i = 0; i < partidas.Count; i++)
             {
@@ -244,21 +162,27 @@ namespace Domain
 
                 if (timeAnfitriaoGols > timeVisitanteGols)
                 {
-                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timeAnfitriaoGols, golContra);
+                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeVisitante, timeVisitanteGols);
+                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeAnfitriao, timeAnfitriaoGols);
                     timesEmPartida.TimeAnfitriao.Tabela.MarcarVitoria();
                     timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
                     timesEmPartida.TimeVisitante.Tabela.MarcarDerrota();
-                    rodada.AdicionarPartida(timesEmPartida);
-                    rodadas.Add(rodada);
+                    timesEmPartida.TimeAnfitriao.Tabela.DisputarPartida();
+                    timesEmPartida.TimeVisitante.Tabela.DisputarPartida();
+                    timesEmPartida.TimeAnfitriao.Tabela.AtualizarPerctAproveitamento();
+                    timesEmPartida.TimeVisitante.Tabela.AtualizarPerctAproveitamento();
                 }
                 else if (timeAnfitriaoGols < timeVisitanteGols)
                 {
-                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeVisitante, timesEmPartida.TimeAnfitriao, timeVisitanteGols, golContra);
+                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeVisitante, timeVisitanteGols);
+                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeAnfitriao, timeAnfitriaoGols);
                     timesEmPartida.TimeAnfitriao.Tabela.MarcarDerrota();
                     timesEmPartida.TimeVisitante.Tabela.MarcarVitoria();
                     timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
-                    rodada.AdicionarPartida(timesEmPartida);
-                    rodadas.Add(rodada);
+                    timesEmPartida.TimeAnfitriao.Tabela.DisputarPartida();
+                    timesEmPartida.TimeVisitante.Tabela.DisputarPartida();
+                    timesEmPartida.TimeAnfitriao.Tabela.AtualizarPerctAproveitamento();
+                    timesEmPartida.TimeVisitante.Tabela.AtualizarPerctAproveitamento();
                 }
                 else
                 {
@@ -270,62 +194,52 @@ namespace Domain
                         timesEmPartida.TimeVisitante.Tabela.MarcarGolsContra();
                     }
 
+                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeVisitante, timeVisitanteGols);
+                    GeradorJogadoresGoleadoresMockados(timesEmPartida.TimeAnfitriao, timeAnfitriaoGols);
                     timesEmPartida.TimeAnfitriao.Tabela.MarcarEmpate();
                     timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
+                    timesEmPartida.TimeAnfitriao.Tabela.DisputarPartida();
                     timesEmPartida.TimeVisitante.Tabela.MarcarEmpate();
+                    timesEmPartida.TimeAnfitriao.Tabela.AtualizarPerctAproveitamento();
                     timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
-                    rodada.AdicionarPartida(timesEmPartida);
-                    rodadas.Add(rodada);
+                    timesEmPartida.TimeVisitante.Tabela.DisputarPartida();
+                    timesEmPartida.TimeVisitante.Tabela.AtualizarPerctAproveitamento();
+
                 }
 
             }
-
-
-        }
-
-        // ! Se der merda no teste, apagar esse método para plano de contingência
-        private void GerarProximoConfronto()
-        {
-            Random sorteador = new Random();
-            var quemJogaComQuem = new List<int>();
-
-            while (quemJogaComQuem.Count <= times.Count)
-            {
-                int getNumber = sorteador.Next(0, times.Count - 1);
-
-                if (!quemJogaComQuem.Contains(getNumber))
-                {
-                    quemJogaComQuem.Add(getNumber);
-                }
-            }
-
-            for (int i = 0; i < times.Count; i += 2)
-            {
-                partida.AdicionarTimeAnfitriaoAPartida(times[quemJogaComQuem[i]]);
-                partida.AdicionarTimeVisitanteAPartida(times[quemJogaComQuem[i + 1]]);
-                partidas.Add(partida);
-            }
+            rodada.AdicionarPartida(partidas);
+            rodadas.Add(rodada);
 
         }
 
-        public void GerarProximoConfrontoMocado()
+        private void GerarProximoConfrontoMocado(int golsAnfitriao, int golsVisitante)
         {
             for (int i = 0; i < times.Count; i += 2)
             {
+                partida = new PartidaCampeonatoBrasileirao();
                 partida.AdicionarTimeAnfitriaoAPartida(times[i]);
+                partida.MarcarGolAnfitriao(golsAnfitriao);
+
+                for (int j = 0; j < golsVisitante; j++)
+                {
+                    partida.TimeAnfitriao.Tabela.MarcarGolsContra();
+                }
                 partida.AdicionarTimeVisitanteAPartida(times[i + 1]);
+                partida.MarcarGolVisitante(golsVisitante);
+
+                for (int j = 0; j < golsAnfitriao; j++)
+                {
+                    partida.TimeVisitante.Tabela.MarcarGolsContra();
+                }
                 partidas.Add(partida);
+                partida = null;
             }
 
         }
-        private int GeradorGols()
-        {
-            var geradorGols = new Random();
 
-            return geradorGols.Next(0, 6);
-        }
 
-        private void GeradorJogadoresGoleadores(Time timeVencedor, Time timePerdedor, int golFeitos)
+        private void GeradorJogadoresGoleadoresMockados(Time timeVencedor, int golFeitos)
         {
             var gerador = new Random();
             var idTime = timeVencedor.Id;
@@ -334,37 +248,6 @@ namespace Domain
             {
                 var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
                 var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
-
-                if (jogadorGoleador.Nome == "Gol Contra")
-                {
-                    timePerdedor.Tabela.MarcarGolsPro();
-                    timeVencedor.Tabela.MarcarGolsContra();
-                    continue;
-                }
-
-                times.Find(i => i.Id == idTime).Tabela.MarcarGolsPro();
-                times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
-            }
-
-        }
-
-        private void GeradorJogadoresGoleadoresMockados(Time timeVencedor, Time timePerdedor, int golFeitos, bool golContra)
-        {
-            var gerador = new Random();
-            var idTime = timeVencedor.Id;
-
-            for (int i = 0; i < golFeitos; i++)
-            {
-                var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
-                var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
-
-                if (golContra)
-                {
-                    timePerdedor.Tabela.MarcarGolsPro();
-                    timeVencedor.Tabela.MarcarGolsContra();
-                    continue;
-                }
-
                 times.Find(i => i.Id == idTime).Tabela.MarcarGolsPro();
                 times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
             }
@@ -372,16 +255,14 @@ namespace Domain
         }
 
 
-        // ! Se der merda, descomentar esse método para plano de contingência
-
-        // private List<((string anfitriao, int golsAnfitriao, string visitante, int golsVisitante), int rodada)> GerarRodada(int qtdRodadas)
+        //*Descomentar para Ter um sistema mais randômico
+        // private void GerarRodada(int qtdRodadas)
         // {
-        //     var listaResultadosRodada = new List<((string anfitriao, int golsAnfitriao, string visitante, int golsVisitante), int rodada)>();
-        //     while (qtdRodadas <= Rodada)
+        //     while (qtdRodadas <= nRodada)
         //     {
-        //         Rodada++;
+        //         nRodada++;
 
-        //         var partidas = GerarProximoConfronto();
+        //         GerarProximoConfronto();
 
         //         for (int i = 0; i < partidas.Count; i++)
         //         {
@@ -389,54 +270,67 @@ namespace Domain
         //             var timeVisitanteGols = 6 - timeAnfitriaoGols;
         //             var timesEmPartida = partidas.ElementAt(i);
 
+
         //             if (timeAnfitriaoGols > timeVisitanteGols)
         //             {
-        //                 GeradorJogadoresGoleadores(timesEmPartida.anfitriao, timesEmPartida.visitante, timeAnfitriaoGols);
-        //                 timesEmPartida.anfitriao.MarcarVitoria();
-        //                 timesEmPartida.anfitriao.MarcarPontuacao();
-        //                 timesEmPartida.visitante.MarcarDerrota();
-        //                 listaResultadosRodada.Add(((timesEmPartida.anfitriao.NomeTime, timeAnfitriaoGols, timesEmPartida.visitante.NomeTime, timeVisitanteGols), Rodada));
+        //                 GeradorJogadoresGoleadores(timesEmPartida.TimeVisitante, timeVisitanteGols);
+        //                 GeradorJogadoresGoleadores(timesEmPartida.TimeAnfitriao, timeAnfitriaoGols);
+        //                 timesEmPartida.TimeAnfitriao.Tabela.MarcarVitoria();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
+        //                 timesEmPartida.TimeVisitante.Tabela.MarcarDerrota();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.DisputarPartida();
+        //                 timesEmPartida.TimeVisitante.Tabela.DisputarPartida();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.AtualizarPerctAproveitamento();
+        //                 timesEmPartida.TimeVisitante.Tabela.AtualizarPerctAproveitamento();
         //             }
         //             else if (timeAnfitriaoGols < timeVisitanteGols)
         //             {
-        //                 GeradorJogadoresGoleadores(timesEmPartida.visitante, timesEmPartida.anfitriao, timeVisitanteGols);
-        //                 timesEmPartida.anfitriao.MarcarDerrota();
-        //                 timesEmPartida.visitante.MarcarVitoria();
-        //                 timesEmPartida.visitante.MarcarPontuacao();
-        //                 listaResultadosRodada.Add(((timesEmPartida.anfitriao.NomeTime, timeAnfitriaoGols, timesEmPartida.visitante.NomeTime, timeVisitanteGols), Rodada));
+        //                 GeradorJogadoresGoleadores(timesEmPartida.TimeVisitante, timeVisitanteGols);
+        //                 GeradorJogadoresGoleadores(timesEmPartida.TimeAnfitriao, timeAnfitriaoGols);
+        //                 timesEmPartida.TimeAnfitriao.Tabela.MarcarDerrota();
+        //                 timesEmPartida.TimeVisitante.Tabela.MarcarVitoria();
+        //                 timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.DisputarPartida();
+        //                 timesEmPartida.TimeVisitante.Tabela.DisputarPartida();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.AtualizarPerctAproveitamento();
+        //                 timesEmPartida.TimeVisitante.Tabela.AtualizarPerctAproveitamento();
         //             }
         //             else
         //             {
         //                 for (int j = 0; j < timeAnfitriaoGols; j++)
         //                 {
-        //                     timesEmPartida.anfitriao.MarcarGolsPro();
-        //                     timesEmPartida.visitante.MarcarGolsPro();
+        //                     timesEmPartida.TimeAnfitriao.Tabela.MarcarGolsPro();
+        //                     timesEmPartida.TimeAnfitriao.Tabela.MarcarGolsContra();
+        //                     timesEmPartida.TimeVisitante.Tabela.MarcarGolsPro();
+        //                     timesEmPartida.TimeVisitante.Tabela.MarcarGolsContra();
         //                 }
 
-        //                 timesEmPartida.anfitriao.MarcarEmpate();
-        //                 timesEmPartida.anfitriao.MarcarPontuacao();
-        //                 timesEmPartida.visitante.MarcarEmpate();
-        //                 timesEmPartida.visitante.MarcarPontuacao();
-        //                 listaResultadosRodada.Add(((timesEmPartida.anfitriao.NomeTime, timeAnfitriaoGols, timesEmPartida.visitante.NomeTime, timeVisitanteGols), Rodada));
+        //                 GeradorJogadoresGoleadores(timesEmPartida.TimeVisitante, timeVisitanteGols);
+        //                 GeradorJogadoresGoleadores(timesEmPartida.TimeAnfitriao, timeAnfitriaoGols);
+        //                 timesEmPartida.TimeAnfitriao.Tabela.MarcarEmpate();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.MarcarPontuacao();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.DisputarPartida();
+        //                 timesEmPartida.TimeVisitante.Tabela.MarcarEmpate();
+        //                 timesEmPartida.TimeAnfitriao.Tabela.AtualizarPerctAproveitamento();
+        //                 timesEmPartida.TimeVisitante.Tabela.MarcarPontuacao();
+        //                 timesEmPartida.TimeVisitante.Tabela.DisputarPartida();
+        //                 timesEmPartida.TimeVisitante.Tabela.AtualizarPerctAproveitamento();
+
         //             }
 
         //         }
 
+        //         rodada.AdicionarPartida(partidas);
+        //         rodadas.Add(rodada);
         //     }
 
-        //     return listaResultadosRodada;
         // }
 
-
-
-        // ! Se der merda, descomentar esse método para plano de contingência
-
-        //  private List<(Time anfitriao, Time visitante)> GerarProximoConfronto()
+        // // ! Se der merda no teste, apagar esse método para plano de contingência
+        // private void GerarProximoConfronto()
         // {
         //     Random sorteador = new Random();
         //     var quemJogaComQuem = new List<int>();
-
-        //     var partida = new List<(Time anfitriao, Time visitante)>();
 
         //     while (quemJogaComQuem.Count <= times.Count)
         //     {
@@ -450,11 +344,36 @@ namespace Domain
 
         //     for (int i = 0; i < times.Count; i += 2)
         //     {
-        //         partida.Add((times[quemJogaComQuem[i]], times[quemJogaComQuem[i + 1]]));
+        //         partida = new PartidaCampeonatoBrasileirao();
+        //         partida.AdicionarTimeAnfitriaoAPartida(times[quemJogaComQuem[i]]);
+        //         partida.AdicionarTimeVisitanteAPartida(times[quemJogaComQuem[i + 1]]);
+        //         partidas.Add(partida);
         //     }
 
-        //     return partida;
         // }
+
+        // private int GeradorGols()
+        // {
+        //     var geradorGols = new Random();
+
+        //     return geradorGols.Next(0, 6);
+        // }
+
+        // private void GeradorJogadoresGoleadores(Time timeVencedor, int golFeitos)
+        // {
+        //     var gerador = new Random();
+        //     var idTime = timeVencedor.Id;
+
+        //     for (int i = 0; i < golFeitos; i++)
+        //     {
+        //         var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
+        //         var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
+        //         times.Find(i => i.Id == idTime).Tabela.MarcarGolsPro();
+        //         times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
+        //     }
+
+        // }
+
 
     }
 }

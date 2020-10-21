@@ -13,7 +13,7 @@ namespace Domain
         private bool empate = false;
         public int GolsPro { get; private set;}
         public int GolsContra { get; private set;} 
-        public double PercentagemAproveitamento { get; private set;}
+        public double PercentagemAproveitamento { get; private set;} = 0.0;
 
       
        
@@ -54,7 +54,7 @@ namespace Domain
 
         public void AtualizarPerctAproveitamento()
         {
-            PercentagemAproveitamento = (Pontuacao/(PartidasDisputadas * 3))*100;
+            PercentagemAproveitamento = (Pontuacao/(PartidasDisputadas * 3.0))*100.0;
         }
 
         public void MarcarPontuacao()

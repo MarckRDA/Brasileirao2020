@@ -15,6 +15,11 @@ namespace Domain
         public List<string> ExibirClassificacaoDeArtilheiros(Usuario usuario);
         public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas);
         
+        public void GerarRodadaMockada(int golsAnfitriao, int golsVisitante); // !Comentar após fim do testes
+
+        //public void GerarProximoConfrontoMocado();  // !Comentar após fim do testes
+        public IReadOnlyCollection<Time> ObterListaTimes() ;  // !Comentar após fim do testes
+
 
     }
 }

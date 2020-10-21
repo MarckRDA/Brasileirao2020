@@ -15,16 +15,16 @@ namespace Domain
 
         public void AdicionarTimeVisitanteAPartida(Time timeVisitante)
         {
-            TimeAnfitriao = timeVisitante;
+            TimeVisitante = timeVisitante;
         }
-        public void MarcarGolAnfitriao()
+        public void MarcarGolAnfitriao(int gol)
         {
-            GolsAnfitriao++;
+            GolsAnfitriao = gol;
         }
 
-        public void MarcarGolVisitante()
+        public void MarcarGolVisitante(int gol)
         {
-            GolsVisitante++;
+            GolsVisitante = gol;
         }
     }
 }
