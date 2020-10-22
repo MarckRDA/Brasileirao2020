@@ -19,7 +19,6 @@ namespace Domain
 
         //public void GerarProximoConfrontoMocado();  // !Comentar após fim do testes
         public IReadOnlyCollection<Time> ObterListaTimes() ;  // !Comentar após fim do testes
-
-
+        
     }
 }
