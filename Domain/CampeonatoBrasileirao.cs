@@ -127,7 +127,7 @@ namespace Domain
                 return null;
             }
 
-            GerarRodadaMockada(qtdRodadas);
+            GerarRodadas(qtdRodadas);
             var listaResultados = new List<string>();
             for (int i = 0; i < qtdRodadas; i++)
             {
@@ -142,16 +142,20 @@ namespace Domain
         }
 
 
-        // *<------------------- Sistema Determinístico--------------------------->
+
+        //* --------------------------Operações Internas a classe------------------------------->
+
+        // *<-------------------------------Sistema Randômico---------------------------------->
     
         /*
             Deixei o Gerador de rodada com sorteios de confronto de times aleatoriamente
-            expus esse método para, ao ser chamado pela quantidade de vezes, será somado a rodada.
+            irá gerar as rodadas igual ao numero da rodada recebida como paramentro no
+            método ExibirResultadoDaRodada.
             Nos testes, chamei apenas uma vez para testar se estava retornando o que era proposto.
 
         */
 
-        private void GerarRodadaMockada(int qtdRodadas)
+        private void GerarRodadas(int qtdRodadas)
         {
             while (nRodada < qtdRodadas)
             {
@@ -170,9 +174,6 @@ namespace Domain
                 
             }
         }
-
-        //* --------------------------Operações Internas a classe ------------------------------
-
         /*
             O método SetarEstatisticas irá chamar as operações de estatisticas do time anfitrião e 
             visitante. Cada time tem sua própria tabela de estatisticas onde será utilizada para ranquear

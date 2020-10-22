@@ -150,6 +150,7 @@ namespace Tests
             //campeonatoBrasileirao.GerarRodadaMockada(1,1);
             //campeonatoBrasileirao.GerarRodadaMockada(1,2);
             //campeonatoBrasileirao.GerarRodadaMockada(4,2);
+            campeonatoBrasileirao.ExibirResultadoDaRodada(cbf, 5);
 
             //When
             var tabelaAtualizadaAposTresRodadas = campeonatoBrasileirao.ApresentarTabela(torcedor);
@@ -206,6 +207,7 @@ namespace Tests
             //campeonatoBrasileirao.GerarRodadaMockada(1,1);
             //campeonatoBrasileirao.GerarRodadaMockada(1,2);
             //campeonatoBrasileirao.GerarRodadaMockada(4,2);
+            campeonatoBrasileirao.ExibirResultadoDaRodada(cbf, 5);
 
             //When
             var timesRebaixados = campeonatoBrasileirao.ExibirTimesRebaixados(torcedor);
@@ -230,7 +232,8 @@ namespace Tests
             //campeonatoBrasileirao.GerarRodadaMockada(1,1);
             //campeonatoBrasileirao.GerarRodadaMockada(1,2);
             //campeonatoBrasileirao.GerarRodadaMockada(4,2);
-
+            campeonatoBrasileirao.ExibirResultadoDaRodada(cbf, 5);
+            
             //When
             var timesClassificadosLibertadores = campeonatoBrasileirao.ExibirTimesClassificadosLibertadores(torcedor);
             var timesClassificadosLibertadoresEsperados = new List<string>()
