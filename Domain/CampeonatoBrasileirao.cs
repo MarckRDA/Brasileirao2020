@@ -11,8 +11,8 @@ namespace Domain
         private bool inicioCampeonato = false;
         private int nRodada = 0;
         private List<Partida> partidas = new List<Partida>();
-        private List<Rodada> rodadas = new List<Rodada>(); 
-        private Partida partida; 
+        private List<Rodada> rodadas = new List<Rodada>();
+        private Partida partida;
         private Rodada rodada = new RodadaCampeonatoBrasileirao();
 
 
@@ -120,16 +120,16 @@ namespace Domain
             return jogadorArtilheiroFormatados;
         }
 
-        public List<string> ExibirResultadoDaRodada(Usuario usuario)
+        public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas)
         {
             if (!(usuario is CBF || usuario is Torcedor))
             {
                 return null;
             }
-                
-            //GerarRodada(qtdRodadas); // !Descomentar para rodar normalmente o programa;
+
+            GerarRodadaMockada(qtdRodadas);
             var listaResultados = new List<string>();
-            for (int i = 0; i < rodadas.Count; i++)
+            for (int i = 0; i < qtdRodadas; i++)
             {
                 for (int j = 0; j < rodadas[i].Partidas.Count; j++)
                 {
@@ -143,7 +143,7 @@ namespace Domain
 
 
         // *<------------------- Sistema Determinístico--------------------------->
-        // ! Utilizando dados mocados para ter previsões nos testes
+    
         /*
             Deixei o Gerador de rodada com sorteios de confronto de times aleatoriamente
             expus esse método para, ao ser chamado pela quantidade de vezes, será somado a rodada.
@@ -151,21 +151,24 @@ namespace Domain
 
         */
 
-        public void GerarRodadaMockada(int golsAnfitriao, int golsVisitante)
+        private void GerarRodadaMockada(int qtdRodadas)
         {
-            nRodada++;
-            GerarProximoConfrontoMocado(golsAnfitriao, golsVisitante);
-
-            for (int i = 0; i < partidas.Count; i++)
+            while (nRodada < qtdRodadas)
             {
-                var timeAnfitriaoGols = golsAnfitriao;
-                var timeVisitanteGols = golsVisitante;
-                var timesEmPartida = partidas.ElementAt(i);
-                SetarEstatisticas(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timeAnfitriaoGols, timeVisitanteGols);
-            }
+                nRodada++;
+                partidas.Clear();
+                GerarProximoConfrontoMocado();
 
-            rodada.AdicionarPartida(partidas);
-            rodadas.Add(rodada);
+                for (int i = 0; i < partidas.Count; i++)
+                {
+                    var timesEmPartida = partidas.ElementAt(i);
+                    SetarEstatisticas(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timesEmPartida.GolsAnfitriao, timesEmPartida.GolsVisitante);
+                }
+
+                rodada.AdicionarPartida(partidas);
+                rodadas.Add(rodada);
+                
+            }
         }
 
         //* --------------------------Operações Internas a classe ------------------------------
@@ -226,13 +229,15 @@ namespace Domain
             Organizo de forma aleatória a lista de times e adiciono na minha propriedade interna partidas.
             Ao chamar ExibirResultadosDaRodada, essa lista é utilizada para fazer a exibição dos confrontos.
         */
-        private void GerarProximoConfrontoMocado(int golsAnfitriao, int golsVisitante)
+        private void GerarProximoConfrontoMocado()
         {
             var rnd = new Random();
             var partidasTemp = times.OrderBy(x => rnd.Next()).ToList();
 
             for (int i = 0; i < times.Count; i += 2)
             {
+                var golsAnfitriao = rnd.Next(0, 5);
+                var golsVisitante = rnd.Next(0, 5);
                 partida = new PartidaCampeonatoBrasileirao();
                 partida.AdicionarTimeAnfitriaoAPartida(partidasTemp[i]);
                 partida.MarcarGolAnfitriao(golsAnfitriao);

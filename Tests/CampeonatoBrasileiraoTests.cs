@@ -122,10 +122,10 @@ namespace Tests
             var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            campeonatoBrasileirao.GerarRodadaMockada(3,4);
+            //campeonatoBrasileirao.GerarRodadaMockada(3,4);
                         
             //When
-            var resultadoRodada = campeonatoBrasileirao.ExibirResultadoDaRodada(cbf);
+            var resultadoRodada = campeonatoBrasileirao.ExibirResultadoDaRodada(cbf, 5);
             var resultadoEsperado = new List<string>()
             {
                 "Rodada 1 Resultado: Atheltico 3 X 4 Athletico Goianiense",
@@ -147,9 +147,9 @@ namespace Tests
             var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            campeonatoBrasileirao.GerarRodadaMockada(1,1);
-            campeonatoBrasileirao.GerarRodadaMockada(1,2);
-            campeonatoBrasileirao.GerarRodadaMockada(4,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,1);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(4,2);
 
             //When
             var tabelaAtualizadaAposTresRodadas = campeonatoBrasileirao.ApresentarTabela(torcedor);
@@ -175,9 +175,9 @@ namespace Tests
             var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            campeonatoBrasileirao.GerarRodadaMockada(1,1);
-            campeonatoBrasileirao.GerarRodadaMockada(1,2);
-            campeonatoBrasileirao.GerarRodadaMockada(4,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,1);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(4,2);
 
             //When
             var tabelaArtilheiros = campeonatoBrasileirao.ExibirClassificacaoDeArtilheiros(torcedor);
@@ -203,9 +203,9 @@ namespace Tests
             var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            campeonatoBrasileirao.GerarRodadaMockada(1,1);
-            campeonatoBrasileirao.GerarRodadaMockada(1,2);
-            campeonatoBrasileirao.GerarRodadaMockada(4,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,1);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(4,2);
 
             //When
             var timesRebaixados = campeonatoBrasileirao.ExibirTimesRebaixados(torcedor);
@@ -227,9 +227,9 @@ namespace Tests
             var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            campeonatoBrasileirao.GerarRodadaMockada(1,1);
-            campeonatoBrasileirao.GerarRodadaMockada(1,2);
-            campeonatoBrasileirao.GerarRodadaMockada(4,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,1);
+            //campeonatoBrasileirao.GerarRodadaMockada(1,2);
+            //campeonatoBrasileirao.GerarRodadaMockada(4,2);
 
             //When
             var timesClassificadosLibertadores = campeonatoBrasileirao.ExibirTimesClassificadosLibertadores(torcedor);
