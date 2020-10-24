@@ -13,6 +13,7 @@ namespace Domain
         private bool empate = false;
         public int GolsPro { get; private set;}
         public int GolsContra { get; private set;} 
+        public int SaldoDeGols {get; private set;}
         public double PercentagemAproveitamento { get; private set;} = 0.0;
 
       
@@ -42,6 +43,10 @@ namespace Domain
             empate = true;
         }
 
+       public void MarcarSaldoDeGols()
+       {
+           SaldoDeGols = GolsPro - GolsContra;
+       } 
         public void MarcarGolsContra()
         {
             GolsContra++;
@@ -73,7 +78,7 @@ namespace Domain
 
         public override string ToString()
         {
-            return $"{Pontuacao} | {PartidasDisputadas} | {Vitorias} | {Empate} | {Derrotas} | {GolsPro} | {GolsContra} | {Math.Round(PercentagemAproveitamento, 2)}%";
+            return $"{Pontuacao}  |  {PartidasDisputadas}  |  {Vitorias}  |  {Empate}  |  {Derrotas}  |  {SaldoDeGols}  |  {GolsPro}  |  {GolsContra}  |   {Math.Round(PercentagemAproveitamento, 2)}%";
         }
 
     }

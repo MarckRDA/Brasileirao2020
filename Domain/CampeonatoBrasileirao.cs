@@ -12,11 +12,13 @@ namespace Domain
         private int nRodada = 0;
         private List<Partida> partidas = new List<Partida>();
         private List<Rodada> rodadas = new List<Rodada>();
+        private List<Partida> todasAsPartidas = new List<Partida>();
         private Partida partida;
         private Rodada rodada = new RodadaCampeonatoBrasileirao();
 
 
         // *<------------------- Metodos de operações externas a classe --------------------------->
+        public IReadOnlyCollection<Time> ObterListaTimes() => Times;
         public void CadastrarTimes(Usuario usuario, List<Time> times)
         {
             if (!(usuario is CBF))
@@ -42,7 +44,6 @@ namespace Domain
             inicioCampeonato = true;
         }
 
-        public IReadOnlyCollection<Time> ObterListaTimes() => Times;
 
         public bool RemoverJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
         {
@@ -62,6 +63,89 @@ namespace Domain
             return times.FirstOrDefault(time => time.Id == idTime).AdicionarJogador(jogador);
         }
 
+        public List<string> ApresentarPartidas()
+        {
+            var mostradorDePartidas = new List<string>();
+            GerarProximoConfronto();
+
+            mostradorDePartidas.Add("------------Proxima Partida------------");
+            for (int i = 0; i < partidas.Count; i++)
+            {
+                mostradorDePartidas.Add($"Partida{i + 1} -> {partidas[i].TimeAnfitriao.NomeTime} X {partidas[i].TimeVisitante.NomeTime}");
+            }
+            return mostradorDePartidas;
+        }
+
+        public bool InscreverResultadoDaPartida(Usuario usuario, int partida, int golsAnfitriao, int golsVisitante)
+        {
+            if (!(usuario is CBF))
+            {
+                throw new PermissaoNegadaException("Essa função só pode ser acessada como CBF!");
+            }
+
+            partidas[partida - 1].MarcarGolAnfitriao(golsAnfitriao);
+
+            for (int j = 0; j < golsVisitante; j++)
+            {
+                partidas[partida - 1].TimeAnfitriao.Tabela.MarcarGolsContra();
+            }
+
+            partidas[partida - 1].MarcarGolVisitante(golsVisitante);
+
+            for (int j = 0; j < golsAnfitriao; j++)
+            {
+                partidas[partida - 1].TimeVisitante.Tabela.MarcarGolsContra();
+            }
+
+            return true;
+        }
+
+        public bool RegistrarJogadoresGoleadoresDaPartida(Usuario usuario, string timeVencedor, string nomeJogador, int golFeitos)
+        {
+            if (!(usuario is CBF))
+            {
+                throw new PermissaoNegadaException("Você não é permitido para a acessar essa função");
+            }
+
+            var time = times.FirstOrDefault(x => x.NomeTime == timeVencedor);
+            var jogador = time.Jogadores.FirstOrDefault(x => x.Nome == nomeJogador);
+
+            for (int i = 0; i < golFeitos; i++)
+            {
+                time.Tabela.MarcarGolsPro();
+                jogador.MarcarGol();
+            }
+            return true;
+        }
+        public bool RegistrarRodada(Usuario usuario)
+        {
+            if (!(usuario is CBF))
+            {
+                throw new PermissaoNegadaException("Você não é permitido para a acessar essa função");
+            }
+
+            GerarRodadas();
+            partidas.Clear();
+            return true;
+        }
+        public List<string> ExibirResultadoDaRodada(Usuario usuario, int rodadaDesejada)
+        {
+            if (!(usuario is CBF || usuario is Torcedor))
+            {
+                return null;
+            }
+
+            var listaResultados = new List<string>();
+
+            for (int j = 0; j < rodadas[rodadaDesejada].Partidas.Count; j++)
+            {
+                var resultadosAMostrar = $"Rodada {rodadaDesejada} Resultado: {rodadas[rodadaDesejada].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[rodadaDesejada].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[rodadaDesejada].Partidas.ElementAt(j).GolsVisitante} {rodadas[rodadaDesejada].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
+                listaResultados.Add(resultadosAMostrar);
+            }
+
+            return listaResultados;
+        }
+
         public List<string> ApresentarTabela(Usuario usuario)
         {
             if (!(usuario is CBF || usuario is Torcedor))
@@ -71,6 +155,8 @@ namespace Domain
 
             var listaTabelaDeClassificacao = new List<string>();
             var timesOrdenador = times.OrderByDescending(time => time.Tabela.Pontuacao);
+            listaTabelaDeClassificacao.Add($"---------------Tabela Brasileirão 2020 ----------------------");
+            listaTabelaDeClassificacao.Add($"Time  |  P  |  PD  |  V  |  E  |  D   | SG  |  GP  |  GC  |  PA");
 
             foreach (var time in timesOrdenador)
             {
@@ -120,33 +206,11 @@ namespace Domain
             return jogadorArtilheiroFormatados;
         }
 
-        public List<string> ExibirResultadoDaRodada(Usuario usuario, int qtdRodadas)
-        {
-            if (!(usuario is CBF || usuario is Torcedor))
-            {
-                return null;
-            }
-
-            GerarRodadas(qtdRodadas);
-            var listaResultados = new List<string>();
-            for (int i = 0; i < qtdRodadas; i++)
-            {
-                for (int j = 0; j < rodadas[i].Partidas.Count; j++)
-                {
-                    var resultadosAMostrar = $"Rodada {i + 1} Resultado: {rodadas[i].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[i].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[i].Partidas.ElementAt(j).GolsVisitante} {rodadas[i].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
-                    listaResultados.Add(resultadosAMostrar);
-                }
-            }
-
-            return listaResultados;
-        }
-
-
 
         //* --------------------------Operações Internas a classe------------------------------->
 
-        // *<-------------------------------Sistema Randômico---------------------------------->
-    
+        // *<-------------------------------Sistema Determinístico---------------------------------->
+
         /*
             Deixei o Gerador de rodada com sorteios de confronto de times aleatoriamente
             irá gerar as rodadas igual ao numero da rodada recebida como paramentro no
@@ -155,24 +219,16 @@ namespace Domain
 
         */
 
-        private void GerarRodadas(int qtdRodadas)
+        private void GerarRodadas()
         {
-            while (nRodada < qtdRodadas)
+            nRodada++;
+            for (int i = 0; i < partidas.Count; i++)
             {
-                nRodada++;
-                partidas.Clear();
-                GerarProximoConfrontoMocado();
-
-                for (int i = 0; i < partidas.Count; i++)
-                {
-                    var timesEmPartida = partidas.ElementAt(i);
-                    SetarEstatisticas(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timesEmPartida.GolsAnfitriao, timesEmPartida.GolsVisitante);
-                }
-
-                rodada.AdicionarPartida(partidas);
-                rodadas.Add(rodada);
-                
+                var timesEmPartida = partidas.ElementAt(i);
+                SetarEstatisticas(timesEmPartida.TimeAnfitriao, timesEmPartida.TimeVisitante, timesEmPartida.GolsAnfitriao, timesEmPartida.GolsVisitante);
             }
+            rodada.AdicionarPartida(partidas);
+            rodadas.Add(rodada);
         }
         /*
             O método SetarEstatisticas irá chamar as operações de estatisticas do time anfitrião e 
@@ -190,18 +246,22 @@ namespace Domain
                 anfitriao.Tabela.MarcarPontuacao();
                 anfitriao.Tabela.DisputarPartida();
                 anfitriao.Tabela.AtualizarPerctAproveitamento();
+                anfitriao.Tabela.MarcarSaldoDeGols();
                 visitante.Tabela.MarcarDerrota();
                 visitante.Tabela.DisputarPartida();
                 visitante.Tabela.AtualizarPerctAproveitamento();
+                visitante.Tabela.MarcarSaldoDeGols();
             }
             else if (golsAnfitriao < golsVisitante)
             {
                 anfitriao.Tabela.MarcarDerrota();
                 anfitriao.Tabela.DisputarPartida();
                 anfitriao.Tabela.AtualizarPerctAproveitamento();
+                anfitriao.Tabela.MarcarSaldoDeGols();
                 visitante.Tabela.MarcarVitoria();
                 visitante.Tabela.MarcarPontuacao();
                 visitante.Tabela.DisputarPartida();
+                visitante.Tabela.MarcarSaldoDeGols();
                 visitante.Tabela.AtualizarPerctAproveitamento();
             }
             else
@@ -218,10 +278,12 @@ namespace Domain
                 anfitriao.Tabela.MarcarPontuacao();
                 anfitriao.Tabela.DisputarPartida();
                 anfitriao.Tabela.AtualizarPerctAproveitamento();
+                anfitriao.Tabela.MarcarSaldoDeGols();
                 visitante.Tabela.MarcarEmpate();
                 visitante.Tabela.MarcarPontuacao();
                 visitante.Tabela.DisputarPartida();
                 visitante.Tabela.AtualizarPerctAproveitamento();
+                visitante.Tabela.MarcarSaldoDeGols();
             }
         }
 
@@ -230,32 +292,43 @@ namespace Domain
             Organizo de forma aleatória a lista de times e adiciono na minha propriedade interna partidas.
             Ao chamar ExibirResultadosDaRodada, essa lista é utilizada para fazer a exibição dos confrontos.
         */
-        private void GerarProximoConfrontoMocado()
+
+        private void GerarProximoConfronto()
         {
-            var rnd = new Random();
-            var partidasTemp = times.OrderBy(x => rnd.Next()).ToList();
-
-            for (int i = 0; i < times.Count; i += 2)
+            if (nRodada == 0)
             {
-                var golsAnfitriao = rnd.Next(0, 5);
-                var golsVisitante = rnd.Next(0, 5);
-                partida = new PartidaCampeonatoBrasileirao();
-                partida.AdicionarTimeAnfitriaoAPartida(partidasTemp[i]);
-                partida.MarcarGolAnfitriao(golsAnfitriao);
-
-                for (int j = 0; j < golsVisitante; j++)
+                for (int i = 0; i < times.Count; i += 2)
                 {
-                    partida.TimeAnfitriao.Tabela.MarcarGolsContra();
+                    partida = new PartidaCampeonatoBrasileirao();
+                    partida.AdicionarTimeAnfitriaoAPartida(times[i]);
+                    partida.AdicionarTimeVisitanteAPartida(times[i + 1]);
+                    partidas.Add(partida);
+                    partida = null;
                 }
-                partida.AdicionarTimeVisitanteAPartida(partidasTemp[i + 1]);
-                partida.MarcarGolVisitante(golsVisitante);
+            }
 
-                for (int j = 0; j < golsAnfitriao; j++)
+            if (nRodada == 1)
+            {
+                for (int i = times.Count - 1; i > 0; i -= 2)
                 {
-                    partida.TimeVisitante.Tabela.MarcarGolsContra();
+                    partida = new PartidaCampeonatoBrasileirao();
+                    partida.AdicionarTimeAnfitriaoAPartida(times[i]);
+                    partida.AdicionarTimeVisitanteAPartida(times[i - 1]);
+                    partidas.Add(partida);
+                    partida = null;
                 }
-                partidas.Add(partida);
-                partida = null;
+            }
+
+            if (nRodada == 2)
+            {
+                for (int i = 0; i < times.Count; i += 2)
+                {
+                    partida = new PartidaCampeonatoBrasileirao();
+                    partida.AdicionarTimeAnfitriaoAPartida(times[i]);
+                    partida.AdicionarTimeVisitanteAPartida(times[i + 2]);
+                    partidas.Add(partida);
+                    partida = null;
+                }
             }
 
         }
@@ -278,5 +351,6 @@ namespace Domain
             }
 
         }
+
     }
 }
