@@ -4,21 +4,36 @@ using System.Linq;
 
 namespace Domain
 {
-    public sealed class CampeonatoBrasileirao : ICampeonato
+    public sealed class CampeonatoBrasileirao : ICampeonato // Criei uma interface com o intuíto de "extender" para um outro campeonato que não seja o brasileiro
     {
         private List<Time> times { get; set; } = new List<Time>();
-        public IReadOnlyCollection<Time> Times => times;
-        private bool inicioCampeonato = false;
-        private int nRodada = 0;
         private List<Partida> partidas = new List<Partida>();
         private List<Rodada> rodadas = new List<Rodada>();
         private List<Partida> todasAsPartidas = new List<Partida>();
+        private bool inicioCampeonato = false;
+        private int nRodada = 0;
         private Partida partida;
         private Rodada rodada = new RodadaCampeonatoBrasileirao();
 
 
         // *<------------------- Metodos de operações externas a classe --------------------------->
-        public IReadOnlyCollection<Time> ObterListaTimes() => Times;
+
+        //Método acessor ao campo times criado para ser utilizado como operador na classe de teste
+        public IReadOnlyCollection<Time> ObterListaTimes() => times;
+        
+        // Outro método acessor para fazer a mesma porcaria descrito acima.
+        public IReadOnlyCollection<Partida> ObterTodasAsPartidas() => todasAsPartidas;          
+        /*
+            Aqui efetivamente começa a implementação da lógica das operações definidas no modelo de negócio
+            espero que esteja certo... Enfim, Cadastrar times só permitirá a inserção de times no campeonato
+            se uma serie de condições forem atendidas.
+            * Somente o usuário CBF pode cadastrar times
+            * Se o campeonato estiver sido iniciado, não poderá cadastrar nenhum time
+            * a lista de times for maior que 8... sim, 8, só vejo lógica com 8.
+
+            Se passar pelas condições, recederá a lista de times, iniciará o campeonato e gerará de antemão 
+            as partidas, explicarei mais abaixo o método GerarTodasAsPartidas
+        */
         public void CadastrarTimes(Usuario usuario, List<Time> times)
         {
             if (!(usuario is CBF))
@@ -29,21 +44,21 @@ namespace Domain
             {
                 throw new PermissaoNegadaException("Você não pode fazer essa operação. O campeonato já começou!");
             }
-            else if (times.Count % 2 != 0)
-            {
-                throw new LimiteNaoPermitidoException("Deverá inscrever quantidades de times pares!!");
-            }
-            else if (times.Count < 7)
+            else if (times.Count < 8)
             {
                 throw new LimiteNaoPermitidoException("Deverá inscrever mais de 8 times para o campeonato!!");
             }
 
 
             this.times = times;
-
             inicioCampeonato = true;
+            GerarTodasAsPartidas();
         }
 
+        /*
+            Método feito para remover os jogadores de um time de interesse.Só pode ser acessada como CBF
+            Se não for atendida, lançará uma exceção.
+        */
 
         public bool RemoverJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
         {
@@ -54,6 +69,11 @@ namespace Domain
             return times.FirstOrDefault(time => time.Id == idTime).RemoverJogador(jogador);
         }
 
+        /*
+            Mesma lógica de defesa do método acima. Aqui será para adicionar um jogador ao time de interesse.
+            A lógica é impleentada na classe Time.
+        */
+
         public bool AdicionarJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
         {
             if (!(usuario is CBF))
@@ -63,7 +83,13 @@ namespace Domain
             return times.FirstOrDefault(time => time.Id == idTime).AdicionarJogador(jogador);
         }
 
-        public List<string> ApresentarPartidas()
+        /*
+            Método que apresenta as partida para aquela rodada em especial que foi chamada. 
+            A quantidade de vezes que for chamada esse método irá acrescer +1 rodada.
+            Quem é o cabeça da função é o método privado GerarProximoConfronto, onde ele fará a logica de
+            separar todas as partidas possíveis já geradas em 7 rodadas.
+        */
+        public List<string> ApresentarPartidas(Usuario usuario)
         {
             var mostradorDePartidas = new List<string>();
             GerarProximoConfronto();
@@ -75,6 +101,38 @@ namespace Domain
             }
             return mostradorDePartidas;
         }
+
+        /*
+            Método criado para saber se algum time de interesse irá realmente jogar com todos os outros times do campeonato.
+            Nessa modalidade de campeonato não tem returno, ou seja, se o time for uma merda fora de casa, se F*&@u.
+            Todas as operações que esta sendo realizada, está alterando o estado (campos) dessa classe.
+        */
+        public List<string> MostrarPartidasQueOTimeEnfrenta(string nomeDoTime)
+        {
+            var mostradorDePartidas = new List<string>();
+
+            var idTime = times.FirstOrDefault(x => x.NomeTime == nomeDoTime).Id;
+
+            var anfitriao = todasAsPartidas.Where(x => x.TimeAnfitriao.Id == idTime).Select(x => $"{x.TimeAnfitriao.NomeTime} X {x.TimeVisitante.NomeTime}").ToList();
+            var visitante = todasAsPartidas.Where(x => x.TimeVisitante.Id == idTime).Select(x => $"{x.TimeAnfitriao.NomeTime} X {x.TimeVisitante.NomeTime}").ToList();
+            
+            for (int i = 0; i < anfitriao.Count; i++)
+            {
+                mostradorDePartidas.Add(anfitriao[i]);
+            }
+
+            for (int i = 0; i < visitante.Count; i++)
+            {
+                mostradorDePartidas.Add(visitante[i]);
+            }            
+            
+            return mostradorDePartidas;
+        }
+        
+        /*
+            Aqui estará simulando um quarto arbitro, onnde ele irá escrever os resultados das partidas da rodada
+            será chamado no teste para o simples mockar de gols. a lógica esta sendo implementada na classe partida.
+        */
 
         public bool InscreverResultadoDaPartida(Usuario usuario, int partida, int golsAnfitriao, int golsVisitante)
         {
@@ -100,6 +158,10 @@ namespace Domain
             return true;
         }
 
+        /*
+            Aqui é a mesma palhaçada do método acima, porem é com os jogadores que fizeram gols nas partidas da ultima rodada.
+            A lógica é implementada na classe TabelaDeEstatistica.
+        */
         public bool RegistrarJogadoresGoleadoresDaPartida(Usuario usuario, string timeVencedor, string nomeJogador, int golFeitos)
         {
             if (!(usuario is CBF))
@@ -117,6 +179,11 @@ namespace Domain
             }
             return true;
         }
+
+        /*
+            Irá efetivamente registar os resultado das partidas e finalizará a rodada.
+            GerarRodadas é o cabeça na área
+        */
         public bool RegistrarRodada(Usuario usuario)
         {
             if (!(usuario is CBF))
@@ -125,9 +192,12 @@ namespace Domain
             }
 
             GerarRodadas();
-            partidas.Clear();
             return true;
         }
+
+        /*
+            Aqui irá apenas mostrar para o usuario, os resultados da rodada.. um Pretty Print dos resultados
+        */
         public List<string> ExibirResultadoDaRodada(Usuario usuario, int rodadaDesejada)
         {
             if (!(usuario is CBF || usuario is Torcedor))
@@ -137,15 +207,18 @@ namespace Domain
 
             var listaResultados = new List<string>();
 
-            for (int j = 0; j < rodadas[rodadaDesejada].Partidas.Count; j++)
+            for (int j = 0; j < rodadas[rodadaDesejada - 1].Partidas.Count; j++)
             {
-                var resultadosAMostrar = $"Rodada {rodadaDesejada} Resultado: {rodadas[rodadaDesejada].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[rodadaDesejada].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[rodadaDesejada].Partidas.ElementAt(j).GolsVisitante} {rodadas[rodadaDesejada].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
+                var resultadosAMostrar = $"Rodada {rodadaDesejada} Resultado: {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[rodadaDesejada -1].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[rodadaDesejada -1].Partidas.ElementAt(j).GolsVisitante} {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
                 listaResultados.Add(resultadosAMostrar);
             }
 
             return listaResultados;
         }
 
+        /*
+            Aqui tbm é a mesma bobeira do método acima. mostrará um Pretty Print da tabela de classeificação.
+        */
         public List<string> ApresentarTabela(Usuario usuario)
         {
             if (!(usuario is CBF || usuario is Torcedor))
@@ -157,27 +230,43 @@ namespace Domain
             var timesOrdenador = times.OrderByDescending(time => time.Tabela.Pontuacao);
             listaTabelaDeClassificacao.Add($"---------------Tabela Brasileirão 2020 ----------------------");
             listaTabelaDeClassificacao.Add($"Time  |  P  |  PD  |  V  |  E  |  D   | SG  |  GP  |  GC  |  PA");
+            var posições = 1;
 
             foreach (var time in timesOrdenador)
             {
-                listaTabelaDeClassificacao.Add($"{time.NomeTime} | " + time.Tabela.ToString());
+                listaTabelaDeClassificacao.Add($"{posições} - {time.NomeTime} | " + time.Tabela.ToString());
+                posições++;
             }
 
             return listaTabelaDeClassificacao;
         }
 
+        /*
+            O nome fala por si só
+        */
         public List<string> ExibirTimesClassificadosLibertadores(Usuario usuario)
         {
             if (!(usuario is CBF || usuario is Torcedor))
             {
                 return null;
             }
-            return ApresentarTabela(usuario).Take(4).ToList();
+            var listaClassificados = new List<string>();
+            
+            for (int i = 2; i < ApresentarTabela(usuario).Count - 4; i++)
+            {
+                listaClassificados.Add(ApresentarTabela(usuario)[i]);
+            }
+                        
+            return listaClassificados;
         }
 
+        /*
+            Idem, idem.. é o se.. 
+        */
 
         public List<string> ExibirTimesRebaixados(Usuario usuario)
         {
+
             if (!(usuario is CBF || usuario is Torcedor))
             {
                 return null;
@@ -185,6 +274,11 @@ namespace Domain
 
             return ApresentarTabela(usuario).TakeLast(4).ToList();
         }
+
+        /*
+            Aqui a lógica é pegar todos os jogadores de todos os times e jogá-los numa lista
+            onde irei ordená-los pela quantidade de gols feitos e pegar somente os 5 primeiros.
+        */
 
         public List<string> ExibirClassificacaoDeArtilheiros(Usuario usuario)
         {
@@ -212,16 +306,13 @@ namespace Domain
         // *<-------------------------------Sistema Determinístico---------------------------------->
 
         /*
-            Deixei o Gerador de rodada com sorteios de confronto de times aleatoriamente
-            irá gerar as rodadas igual ao numero da rodada recebida como paramentro no
-            método ExibirResultadoDaRodada.
-            Nos testes, chamei apenas uma vez para testar se estava retornando o que era proposto.
-
+            O gerador de rodadas somente pegará as partidas da atual rodada e setará as estatisticas da partidas
+            tipo, marcar vitória e so on..
         */
 
         private void GerarRodadas()
         {
-            nRodada++;
+            
             for (int i = 0; i < partidas.Count; i++)
             {
                 var timesEmPartida = partidas.ElementAt(i);
@@ -230,6 +321,7 @@ namespace Domain
             rodada.AdicionarPartida(partidas);
             rodadas.Add(rodada);
         }
+        
         /*
             O método SetarEstatisticas irá chamar as operações de estatisticas do time anfitrião e 
             visitante. Cada time tem sua própria tabela de estatisticas onde será utilizada para ranquear
@@ -237,9 +329,7 @@ namespace Domain
         */
         private void SetarEstatisticas(Time anfitriao, Time visitante, int golsAnfitriao, int golsVisitante)
         {
-            GeradorJogadoresGoleadoresMockados(visitante, golsVisitante);
-            GeradorJogadoresGoleadoresMockados(anfitriao, golsAnfitriao);
-
+            
             if (golsAnfitriao > golsVisitante)
             {
                 anfitriao.Tabela.MarcarVitoria();
@@ -266,14 +356,6 @@ namespace Domain
             }
             else
             {
-                for (int j = 0; j < golsAnfitriao; j++)
-                {
-                    anfitriao.Tabela.MarcarGolsPro();
-                    anfitriao.Tabela.MarcarGolsContra();
-                    visitante.Tabela.MarcarGolsPro();
-                    visitante.Tabela.MarcarGolsContra();
-                }
-
                 anfitriao.Tabela.MarcarEmpate();
                 anfitriao.Tabela.MarcarPontuacao();
                 anfitriao.Tabela.DisputarPartida();
@@ -288,69 +370,52 @@ namespace Domain
         }
 
         /*
-            Aqui, este método abaixo é onde a mágica dos confontros aleatórios acontece.
-            Organizo de forma aleatória a lista de times e adiciono na minha propriedade interna partidas.
-            Ao chamar ExibirResultadosDaRodada, essa lista é utilizada para fazer a exibição dos confrontos.
+            Deixei esse método de geração de todas as partiddas o mais Determinístico o possível, ou seja,
+            sempre na primeira rodada será os mesmos times se emfrentanto. É melhor para trabalhar com testes
+            Claro, do jeito o qual estou estanto meus métodos.        
         */
+        //* Aqui é onde gera todas as partidas que o campeonato terá.
+        //* Nesse caso, serão 28 partidas (7 * 4)
+        private void GerarTodasAsPartidas()
+        {
+            var p = new List<Time>(times);
+            p = times.Select(x => x).ToList();
+            
+            while (p.Count > 0)
+            {
+                for (int j = 0; j < p.Count; j++)
+                {
+                    
+                    if (j == 0)
+                    {
+                        continue;
+                    }
 
+                    partida = new PartidaCampeonatoBrasileirao();
+                    partida.AdicionarTimeAnfitriaoAPartida(p[0]);
+                    partida.AdicionarTimeVisitanteAPartida(p[j]);
+                    todasAsPartidas.Add(partida);
+                    partida = null;
+                }
+
+                p.Remove(p[0]);
+            }
+        }
+        
+        // * deixei esse método gerando apenas três rodadas
+        // * porém todos os times jogam uns contras os outros sem repetição. 
         private void GerarProximoConfronto()
         {
-            if (nRodada == 0)
-            {
-                for (int i = 0; i < times.Count; i += 2)
-                {
-                    partida = new PartidaCampeonatoBrasileirao();
-                    partida.AdicionarTimeAnfitriaoAPartida(times[i]);
-                    partida.AdicionarTimeVisitanteAPartida(times[i + 1]);
-                    partidas.Add(partida);
-                    partida = null;
-                }
-            }
-
-            if (nRodada == 1)
-            {
-                for (int i = times.Count - 1; i > 0; i -= 2)
-                {
-                    partida = new PartidaCampeonatoBrasileirao();
-                    partida.AdicionarTimeAnfitriaoAPartida(times[i]);
-                    partida.AdicionarTimeVisitanteAPartida(times[i - 1]);
-                    partidas.Add(partida);
-                    partida = null;
-                }
-            }
-
-            if (nRodada == 2)
-            {
-                for (int i = 0; i < times.Count; i += 2)
-                {
-                    partida = new PartidaCampeonatoBrasileirao();
-                    partida.AdicionarTimeAnfitriaoAPartida(times[i]);
-                    partida.AdicionarTimeVisitanteAPartida(times[i + 2]);
-                    partidas.Add(partida);
-                    partida = null;
-                }
-            }
-
+            partidas.Clear();
+            partidas.Add(todasAsPartidas[0]);
+            partidas.Add(todasAsPartidas[todasAsPartidas.Count - 15]);
+            partidas.Add(todasAsPartidas[todasAsPartidas.Count - 6]);
+            partidas.Add(todasAsPartidas[todasAsPartidas.Count - ++nRodada]);
+            todasAsPartidas.Remove(todasAsPartidas[0]);
+            todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - 15]);
+            todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - 6]);
+            todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - ++nRodada]);            
+            
         }
-
-
-        /*
-            No método abaixo gero jogadores que fazem gols para seu time.
-        */
-        private void GeradorJogadoresGoleadoresMockados(Time timeVencedor, int golFeitos)
-        {
-            var gerador = new Random();
-            var idTime = timeVencedor.Id;
-
-            for (int i = 0; i < golFeitos; i++)
-            {
-                var indexJogador = gerador.Next(0, timeVencedor.Jogadores.Count);
-                var jogadorGoleador = times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador);
-                times.Find(i => i.Id == idTime).Tabela.MarcarGolsPro();
-                times.Find(i => i.Id == idTime).Jogadores.ElementAt(indexJogador).MarcarGol();
-            }
-
-        }
-
     }
 }

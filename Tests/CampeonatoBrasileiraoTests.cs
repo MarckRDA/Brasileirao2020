@@ -134,10 +134,38 @@ namespace Tests
                 "Partida4 -> Ceara X Flamengo"
             };
 
-            var resultado = campeonatoBrasileirao.ApresentarPartidas();
+            var resultado = campeonatoBrasileirao.ApresentarPartidas(cbf);
+            
             
             //Then
             Assert.Equal(partidasAApresentar, resultado);
+        }
+
+        [Fact]
+        public void Deve_Afirmar_Que_Flamengo_Jogará_Com_Todos_Os_Times()
+        {
+            //Given
+            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
+            campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
+
+            var jogosDoFlamengo = new List<string>()
+            {
+                "Atheltico X Flamengo",
+                "Athletico Goianiense X Flamengo",
+                "Athletico Mineiro X Flamengo",
+                "Bahia X Flamengo",
+                "Botafogo X Flamengo",
+                "Bragantino X Flamengo",
+                "Ceara X Flamengo"
+            };
+
+            //When
+            var result = campeonatoBrasileirao.MostrarPartidasQueOTimeEnfrenta("Flamengo");
+
+            //Then
+            Assert.Equal(jogosDoFlamengo, result);
+            Assert.Equal(7, result.Count);
         }
 
         [Fact]
@@ -159,7 +187,7 @@ namespace Tests
                 "Partida4 -> Ceara X Flamengo"
             };
 
-            campeonatoBrasileirao.ApresentarPartidas();
+            campeonatoBrasileirao.ApresentarPartidas(cbf);
             var Atheltico = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Atheltico").Tabela.GolsPro;
 
             //Then
@@ -185,7 +213,8 @@ namespace Tests
                 "Partida4 -> Ceara X Flamengo"
             };
             
-            var partidasExibidas = campeonatoBrasileirao.ApresentarPartidas();
+            var partidasExibidas = campeonatoBrasileirao.ApresentarPartidas(cbf
+            );
             var inscreverResultadoPrimeiraPartida = campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 1, 3, 4);
             var jogadorSantos = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Santos", 2);
             var jogadorLeoGomes = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Leo Gomes", 1);
@@ -219,7 +248,7 @@ namespace Tests
                 "Partida4 -> Ceara X Flamengo"
             };
             
-            var partidasExibidas = campeonatoBrasileirao.ApresentarPartidas();
+            var partidasExibidas = campeonatoBrasileirao.ApresentarPartidas(cbf);
             
             var resultadoPrimeiraPartida = campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 1, 3, 4);
             
@@ -228,22 +257,6 @@ namespace Tests
             var resultadoTerceiraPartida = campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 3, 1, 1);
 
             var resultadoQuartaPartida = campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 4, 0, 3);
-            
-            var athelticoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Atheltico").Tabela.GolsPro;
-            
-            var athleticoGoianienceGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Athletico Goianiense").Tabela.GolsPro;
-            
-            var  athleticoMineiroGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Athletico Mineiro").Tabela.GolsPro;
-            
-            var  bahiaGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Bahia").Tabela.GolsPro;
-            
-            var botafogoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Botafogo").Tabela.GolsPro;
-
-            var bragantinoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Bragantino").Tabela.GolsPro;
-            
-            var cearaGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Ceara").Tabela.GolsPro;
-
-            var flamengoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Flamengo").Tabela.GolsPro;
             
             var jogadorSantos = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Santos", 2);
             
@@ -262,6 +275,24 @@ namespace Tests
             var jogadorClaudinho = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Bragantino", "Claudinho", 1);
 
             var jogadorPedro = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Flamengo", "Pedro", 3);
+            
+            campeonatoBrasileirao.RegistrarRodada(cbf);
+            
+            var athelticoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Atheltico").Tabela.GolsPro;
+            
+            var athleticoGoianienceGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Athletico Goianiense").Tabela.GolsPro;
+            
+            var  athleticoMineiroGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Athletico Mineiro").Tabela.GolsPro;
+            
+            var  bahiaGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Bahia").Tabela.GolsPro;
+            
+            var botafogoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Botafogo").Tabela.GolsPro;
+
+            var bragantinoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Bragantino").Tabela.GolsPro;
+            
+            var cearaGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Ceara").Tabela.GolsPro;
+
+            var flamengoGols = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Flamengo").Tabela.GolsPro;
             
             
             //Then
@@ -289,33 +320,157 @@ namespace Tests
         [Fact]
         public void Deve_Retornar_A_Tabela_De_Pontos_Corridos()
         {
-          
+            //Given
+            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
+            
+            MockPrimeiraRodada(cbf, campeonatoBrasileirao);
+
+            var tabela = new List<string>()
+            {
+                "---------------Tabela Brasileirão 2020 ----------------------",
+                "Time  |  P  |  PD  |  V  |  E  |  D   | SG  |  GP  |  GC  |  PA",
+                "1 - Athletico Goianiense | 3  |  1  |  1  |  0  |  0  |  1  |  4  |  3  |   100%",
+                "2 - Bahia | 3  |  1  |  1  |  0  |  0  |  2  |  3  |  1  |   100%",
+                "3 - Flamengo | 3  |  1  |  1  |  0  |  0  |  3  |  3  |  0  |   100%",
+                "4 - Botafogo | 1  |  1  |  0  |  1  |  0  |  0  |  1  |  1  |   33,33%",
+                "5 - Bragantino | 1  |  1  |  0  |  1  |  0  |  0  |  1  |  1  |   33,33%",
+                "6 - Atheltico | 0  |  1  |  0  |  0  |  1  |  -1  |  3  |  4  |   0%",
+                "7 - Athletico Mineiro | 0  |  1  |  0  |  0  |  1  |  -2  |  1  |  3  |   0%",
+                "8 - Ceara | 0  |  1  |  0  |  0  |  1  |  -3  |  0  |  3  |   0%",
+
+            };
+
+            //When
+            var tabelaDePontos = campeonatoBrasileirao.ApresentarTabela(cbf);
+
+            //Then
+            Assert.Equal(tabela, tabelaDePontos);
+            Assert.Equal(10, tabelaDePontos.Count);
+        }
+
+        [Fact]
+        public void Deve_Retornar_Resultados_Da_Rodada()
+        {
+            //Given
+            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
+            MockPrimeiraRodada(cbf, campeonatoBrasileirao);
+            
+            var listaDeResultados = new List<string>()
+            {
+                "Rodada 1 Resultado: Atheltico 3 X 4 Athletico Goianiense",
+                "Rodada 1 Resultado: Athletico Mineiro 1 X 3 Bahia",
+                "Rodada 1 Resultado: Botafogo 1 X 1 Bragantino",
+                "Rodada 1 Resultado: Ceara 0 X 3 Flamengo"
+            };
+            
+            //When
+            var resultados = campeonatoBrasileirao.ExibirResultadoDaRodada(cbf, 1);
+            
+            //Then
+            Assert.Equal(listaDeResultados, resultados);
         }
 
         [Fact]
         public void Deve_Retornar_A_Relacao_Dos_Artilheiros()
         {
+            //Given
+            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
+            MockPrimeiraRodada(cbf, campeonatoBrasileirao);
+            var golsDudu = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Athletico Goianiense").Jogadores.FirstOrDefault(x => x.Nome == "Dudu").Gol; 
+            var golsPedro = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Flamengo").Jogadores.FirstOrDefault(x => x.Nome == "Pedro").Gol; 
             
-            
+            var possivelListaDeArtilheiros = new List<string>()
+            {
+                "1 Dudu - 4 Gols",
+                "2 Pedro - 3 Gols",
+                "3 Santos - 2 Gols",
+                "4 Gilberto - 2 Gols",
+                "5 Leo Gomes - 1 Gols"
+            };
+
+            //When
+            var atualListaDeArtilheiros = campeonatoBrasileirao.ExibirClassificacaoDeArtilheiros(cbf);
+
+            //Then
+            Assert.Equal(possivelListaDeArtilheiros, atualListaDeArtilheiros);
+            Assert.Equal(4, golsDudu);
+            Assert.Equal(3, golsPedro);
         }
 
 
         [Fact]
         public void Deve_Retornar_Os_Times_Rebaixados()
         {
-            
-            
+             //Given
+            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
+            MockPrimeiraRodada(cbf, campeonatoBrasileirao);
+            var provaveisTimesRebaixados = new List<string>()
+            {
+                "5 - Bragantino | 1  |  1  |  0  |  1  |  0  |  0  |  1  |  1  |   33,33%",
+                "6 - Atheltico | 0  |  1  |  0  |  0  |  1  |  -1  |  3  |  4  |   0%",
+                "7 - Athletico Mineiro | 0  |  1  |  0  |  0  |  1  |  -2  |  1  |  3  |   0%",
+                "8 - Ceara | 0  |  1  |  0  |  0  |  1  |  -3  |  0  |  3  |   0%",
+            };
+
+            //When
+            var atualRebaixados = campeonatoBrasileirao.ExibirTimesRebaixados(torcedor);
+
+            //Then
+            Assert.Equal(provaveisTimesRebaixados, atualRebaixados);
         }
 
         [Fact]
         public void Deve_Retornar_Os_Times_Classificados_Para_A_Libertadores()
         {
-                    
+            //Given
+            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
+            MockPrimeiraRodada(cbf, campeonatoBrasileirao);
+            var provaveisTimesClassificados = new List<string>()
+            {
+                "1 - Athletico Goianiense | 3  |  1  |  1  |  0  |  0  |  1  |  4  |  3  |   100%",
+                "2 - Bahia | 3  |  1  |  1  |  0  |  0  |  2  |  3  |  1  |   100%",
+                "3 - Flamengo | 3  |  1  |  1  |  0  |  0  |  3  |  3  |  0  |   100%",
+                "4 - Botafogo | 1  |  1  |  0  |  1  |  0  |  0  |  1  |  1  |   33,33%",
+            };
+
+            //When
+            var atualClassificados = campeonatoBrasileirao.ExibirTimesClassificadosLibertadores(torcedor);
+
+            //Then
+            Assert.Equal(provaveisTimesClassificados, atualClassificados);
         }
 
 
 
+
         //* Mocks
+
+        public void MockPrimeiraRodada(Usuario cbf, ICampeonato campeonatoBrasileirao)
+        {
+            campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
+            campeonatoBrasileirao.ApresentarPartidas(cbf);
+            campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 1, 3, 4);
+            campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 2, 1, 3);
+            campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 3, 1, 1);
+            campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 4, 0, 3);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Santos", 2);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Leo Gomes", 1);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Athletico Goianiense", "Dudu", 4);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Athletico Mineiro", "Réver", 1);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Bahia", "Gilberto", 2);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Bahia", "Nino Paraiba", 1); 
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Botafogo", "Pedro Raul", 1);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Bragantino", "Claudinho", 1);
+            campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Flamengo", "Pedro", 3);
+            campeonatoBrasileirao.RegistrarRodada(cbf);
+        }
 
         public List<Time> GeradorDeTimesCompleto()
         {

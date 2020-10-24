@@ -2,6 +2,7 @@ namespace Domain
 {
     public class FabricaDeUsuarios
     {
+        //Só é um desing pattern
         public Usuario CriarUsuario(string TipoDeUsuario)
         {
             if (TipoDeUsuario == "admin")
