@@ -19,9 +19,45 @@ namespace Tests
             Assert.NotNull(atletico);
         }
 
+        
+        [Theory]
+        [InlineData("Inter2cional")]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("Sa$@ni")]
+        [InlineData("M,12acpa")]
+        [InlineData(" Mlves")]
+        [InlineData("Malves  ")]
+        
+        public void Should_return_false_Giving_Incorrect_Format_Names(string name)
+        {
+            //Given
+            var time = new TimeCampeonatoBrasileirao(name);
+
+            //When
+            var isValid = time.ValidarNomeTime();
+
+            //Then
+            Assert.False(isValid);
+        }
+
+        [Theory]
+        [InlineData("Internacional")]
+        [InlineData("Bragantino")]
+        public void Should_return_True_Giving_Correct_Format_Names(string name)
+        {
+            //Given
+            var time = new TimeCampeonatoBrasileirao(name);
+
+            //When
+            var isValid = time.ValidarNomeTime();
+
+            //Then
+            Assert.True(isValid);
+        }
 
         [Fact]
-        public void Should_ADD_Jogadores_In_Time()
+        public void Should_ADD_Playes_In_Athletico()
         {
             //Given
             Time atlhetico = new TimeCampeonatoBrasileirao("Atlhetico");
@@ -36,7 +72,24 @@ namespace Tests
         }
 
         [Fact]
-        public void Should_Remove_A_Player()
+        public void Should_Return_False_Trying_To_Remove_A_Player()
+        {
+            //Given
+            Time atlhetico = new TimeCampeonatoBrasileirao("Atlhetico");
+            var listaJogadores = GeradorDeJogadoresAtheltico();
+            atlhetico.AdicionarListaDeJogadores(listaJogadores);
+            var jogadorASerRemovido = new JogadorTime("Thanos");
+
+            //When
+            var result = atlhetico.RemoverJogador(jogadorASerRemovido);
+
+            //Then
+            Assert.False(result);
+        }
+
+
+        [Fact]
+        public void Should_Return_True_Trying_To_Remove_A_Player()
         {
             //Given
             Time atlhetico = new TimeCampeonatoBrasileirao("Atlhetico");
@@ -52,7 +105,24 @@ namespace Tests
         }
 
         [Fact]
-        public void Should_Add_A_Player_In_Team()
+        public void Should_Return_False_Trying_To_Add_A_Player_In_Team()
+        {
+            //Given
+            Time atlhetico = new TimeCampeonatoBrasileirao("Atlhetico");
+            var listaJogadores = GeradorDeJogadoresAtheltico();
+            atlhetico.AdicionarListaDeJogadores(listaJogadores);
+            var jogadorASerAdicionado = listaJogadores.FirstOrDefault(x => x.Nome == "Santos");
+
+            //When
+            var result = atlhetico.AdicionarJogador(jogadorASerAdicionado);
+
+            //Then
+            Assert.False(result);
+        }
+
+
+        [Fact]
+        public void Should_Return_True_Trying_To_Add_A_Player_In_Team()
         {
             //Given
             Time atlhetico = new TimeCampeonatoBrasileirao("Atlhetico");
@@ -66,6 +136,7 @@ namespace Tests
             //Then
             Assert.True(result);
         }
+
 
         [Fact]
         public void Should_Create_Two_Different_Times()

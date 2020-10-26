@@ -20,9 +20,9 @@ namespace Domain
 
         //Método acessor ao campo times criado para ser utilizado como operador na classe de teste
         public IReadOnlyCollection<Time> ObterListaTimes() => times;
-        
+
         // Outro método acessor para fazer a mesma porcaria descrito acima.
-        public IReadOnlyCollection<Partida> ObterTodasAsPartidas() => todasAsPartidas;          
+        public IReadOnlyCollection<Partida> ObterTodasAsPartidas() => todasAsPartidas;
         /*
             Aqui efetivamente começa a implementação da lógica das operações definidas no modelo de negócio
             espero que esteja certo... Enfim, Cadastrar times só permitirá a inserção de times no campeonato
@@ -110,12 +110,13 @@ namespace Domain
         public List<string> MostrarPartidasQueOTimeEnfrenta(string nomeDoTime)
         {
             var mostradorDePartidas = new List<string>();
+            if (!times.Exists(t => t.NomeTime == nomeDoTime)) return mostradorDePartidas = null;
 
             var idTime = times.FirstOrDefault(x => x.NomeTime == nomeDoTime).Id;
 
             var anfitriao = todasAsPartidas.Where(x => x.TimeAnfitriao.Id == idTime).Select(x => $"{x.TimeAnfitriao.NomeTime} X {x.TimeVisitante.NomeTime}").ToList();
             var visitante = todasAsPartidas.Where(x => x.TimeVisitante.Id == idTime).Select(x => $"{x.TimeAnfitriao.NomeTime} X {x.TimeVisitante.NomeTime}").ToList();
-            
+
             for (int i = 0; i < anfitriao.Count; i++)
             {
                 mostradorDePartidas.Add(anfitriao[i]);
@@ -124,11 +125,11 @@ namespace Domain
             for (int i = 0; i < visitante.Count; i++)
             {
                 mostradorDePartidas.Add(visitante[i]);
-            }            
-            
+            }
+
             return mostradorDePartidas;
         }
-        
+
         /*
             Aqui estará simulando um quarto arbitro, onnde ele irá escrever os resultados das partidas da rodada
             será chamado no teste para o simples mockar de gols. a lógica esta sendo implementada na classe partida.
@@ -169,7 +170,12 @@ namespace Domain
                 throw new PermissaoNegadaException("Você não é permitido para a acessar essa função");
             }
 
+            if (!times.Exists(t => t.NomeTime == timeVencedor)) return false;
+
             var time = times.FirstOrDefault(x => x.NomeTime == timeVencedor);
+
+            if (time.Jogadores.Any(x => x.Nome == nomeJogador)) return false;
+
             var jogador = time.Jogadores.FirstOrDefault(x => x.Nome == nomeJogador);
 
             for (int i = 0; i < golFeitos; i++)
@@ -207,12 +213,14 @@ namespace Domain
 
             var listaResultados = new List<string>();
 
-            for (int j = 0; j < rodadas[rodadaDesejada - 1].Partidas.Count; j++)
+            if (rodadaDesejada <= nRodada)
             {
-                var resultadosAMostrar = $"Rodada {rodadaDesejada} Resultado: {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[rodadaDesejada -1].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[rodadaDesejada -1].Partidas.ElementAt(j).GolsVisitante} {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
-                listaResultados.Add(resultadosAMostrar);
+                for (int j = 0; j < rodadas[rodadaDesejada - 1].Partidas.Count; j++)
+                {
+                    var resultadosAMostrar = $"Rodada {rodadaDesejada} Resultado: {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).TimeAnfitriao.NomeTime} {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).GolsAnfitriao} X {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).GolsVisitante} {rodadas[rodadaDesejada - 1].Partidas.ElementAt(j).TimeVisitante.NomeTime}";
+                    listaResultados.Add(resultadosAMostrar);
+                }
             }
-
             return listaResultados;
         }
 
@@ -251,12 +259,12 @@ namespace Domain
                 return null;
             }
             var listaClassificados = new List<string>();
-            
+
             for (int i = 2; i < ApresentarTabela(usuario).Count - 4; i++)
             {
                 listaClassificados.Add(ApresentarTabela(usuario)[i]);
             }
-                        
+
             return listaClassificados;
         }
 
@@ -312,7 +320,7 @@ namespace Domain
 
         private void GerarRodadas()
         {
-            
+
             for (int i = 0; i < partidas.Count; i++)
             {
                 var timesEmPartida = partidas.ElementAt(i);
@@ -321,7 +329,7 @@ namespace Domain
             rodada.AdicionarPartida(partidas);
             rodadas.Add(rodada);
         }
-        
+
         /*
             O método SetarEstatisticas irá chamar as operações de estatisticas do time anfitrião e 
             visitante. Cada time tem sua própria tabela de estatisticas onde será utilizada para ranquear
@@ -329,7 +337,7 @@ namespace Domain
         */
         private void SetarEstatisticas(Time anfitriao, Time visitante, int golsAnfitriao, int golsVisitante)
         {
-            
+
             if (golsAnfitriao > golsVisitante)
             {
                 anfitriao.Tabela.MarcarVitoria();
@@ -380,12 +388,12 @@ namespace Domain
         {
             var p = new List<Time>(times);
             p = times.Select(x => x).ToList();
-            
+
             while (p.Count > 0)
             {
                 for (int j = 0; j < p.Count; j++)
                 {
-                    
+
                     if (j == 0)
                     {
                         continue;
@@ -401,7 +409,7 @@ namespace Domain
                 p.Remove(p[0]);
             }
         }
-        
+
         // * deixei esse método gerando apenas três rodadas
         // * porém todos os times jogam uns contras os outros sem repetição. 
         private void GerarProximoConfronto()
@@ -414,8 +422,8 @@ namespace Domain
             todasAsPartidas.Remove(todasAsPartidas[0]);
             todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - 15]);
             todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - 6]);
-            todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - ++nRodada]);            
-            
+            todasAsPartidas.Remove(todasAsPartidas[todasAsPartidas.Count - ++nRodada]);
+
         }
     }
 }

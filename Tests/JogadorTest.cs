@@ -14,6 +14,44 @@ namespace Tests
             Assert.NotNull(marcos);
         }
 
+        
+        [Theory]
+        [InlineData("Mar2cos alves")]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("Sa$@ni")]
+        [InlineData("M,12.4 alves")]
+        [InlineData(" Mlves")]
+        [InlineData("Malves  ")]
+        
+        public void Should_return_false_Giving_Incorrect_Format_Names(string name)
+        {
+            //Given
+            var jogador = new JogadorTime(name);
+
+            //When
+            var isValid = jogador.ValidarNomeJogador();
+
+            //Then
+            Assert.False(isValid);
+        }
+
+        [Theory]
+        [InlineData("Marcos alves")]
+        [InlineData("sabrina furtado")]
+        public void Should_return_True_Giving_Correct_Format_Names(string name)
+        {
+            //Given
+            var jogador = new JogadorTime(name);
+
+            //When
+            var isValid = jogador.ValidarNomeJogador();
+
+            //Then
+            Assert.True(isValid);
+        }
+
+
         [Fact]
         public void Should_Put_One_Point_In_JogadorTime()
         {

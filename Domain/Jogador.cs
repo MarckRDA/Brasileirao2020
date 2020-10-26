@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace Domain
 {
@@ -21,6 +22,15 @@ namespace Domain
         public void AdicionarNomeJogador(string nome)
         {
             Nome = nome;
+        }
+
+        public bool ValidarNomeJogador()
+        {
+            if (string.IsNullOrEmpty(Nome) || string.IsNullOrWhiteSpace(Nome) || Nome.StartsWith(" ") || Nome.EndsWith(" ")) return false;
+
+            if(Nome.Any(char.IsDigit) || Nome.Any(char.IsSymbol) || Nome.Any(char.IsNumber)) return false;
+
+            return true;
         }
     }
 }
