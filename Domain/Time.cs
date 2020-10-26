@@ -15,7 +15,6 @@ namespace Domain
         public Time(string nomeTime)
         {
             NomeTime = nomeTime;
-            jogadores = new List<Jogador>();
             Id = Guid.NewGuid();     
         }
      

@@ -8,6 +8,7 @@ namespace Domain
         public Guid Id { get; private set; } = new Guid();
         public string Nome { get; private set; }
         public int Gol { get; private set;}
+
         public Jogador(string nome)
         {
             Nome = nome;
