@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Domain
+namespace Domain.src
 {
     public abstract class Time
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-namespace Domain
+namespace Domain.src
 {
     public abstract class Jogador
     {

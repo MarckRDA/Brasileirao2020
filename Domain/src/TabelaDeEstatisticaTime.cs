@@ -1,6 +1,6 @@
 using System;
 
-namespace Domain
+namespace Domain.src
 {
     public abstract class TabelaDeEstatisticaTime 
     {

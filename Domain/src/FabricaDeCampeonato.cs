@@ -1,4 +1,4 @@
-namespace Domain
+namespace Domain.src
 {
     public class FabricaDeCampeonato
     {

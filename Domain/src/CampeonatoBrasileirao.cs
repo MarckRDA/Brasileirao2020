@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Domain
+namespace Domain.src
 {
     public sealed class CampeonatoBrasileirao : ICampeonato // Criei uma interface com o intuíto de "extender" para um outro campeonato que não seja o brasileiro
     {
@@ -173,8 +173,6 @@ namespace Domain
             if (!times.Exists(t => t.NomeTime == timeVencedor)) return false;
 
             var time = times.FirstOrDefault(x => x.NomeTime == timeVencedor);
-
-            if (time.Jogadores.Any(x => x.Nome == nomeJogador)) return false;
 
             var jogador = time.Jogadores.FirstOrDefault(x => x.Nome == nomeJogador);
 

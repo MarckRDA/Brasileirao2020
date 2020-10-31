@@ -1,6 +1,6 @@
 using System;
 
-namespace Domain
+namespace Domain.src
 {
     // Exceção personalizada
     public class LimiteNaoPermitidoException : Exception

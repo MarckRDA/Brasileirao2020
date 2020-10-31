@@ -1,4 +1,5 @@
 using Domain;
+using Domain.src;
 using Xunit;
 
 namespace Tests

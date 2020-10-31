@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Domain;
+using Domain.src;
 using Xunit;
 
 namespace Tests
@@ -213,8 +213,7 @@ namespace Tests
                 "Partida4 -> Ceara X Flamengo"
             };
             
-            var partidasExibidas = campeonatoBrasileirao.ApresentarPartidas(cbf
-            );
+            var partidasExibidas = campeonatoBrasileirao.ApresentarPartidas(cbf);
             var inscreverResultadoPrimeiraPartida = campeonatoBrasileirao.InscreverResultadoDaPartida(cbf, 1, 3, 4);
             var jogadorSantos = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Santos", 2);
             var jogadorLeoGomes = campeonatoBrasileirao.RegistrarJogadoresGoleadoresDaPartida(cbf, "Atheltico", "Leo Gomes", 1);
