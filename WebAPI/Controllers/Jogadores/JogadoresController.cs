@@ -1,12 +1,10 @@
-using WebAPI.Controllers.Jogadores;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Domain.src;
 using WebAPI.Repositorio;
-using System.Linq;
 using System;
 
-namespace Brasileiras2020.WebAPI.Controllers.Jogadores
+namespace WebAPI.Controllers.Jogadores
 {
     [ApiController]
     [Route("Brasileirao2020/[Controller]")]
@@ -24,19 +22,27 @@ namespace Brasileiras2020.WebAPI.Controllers.Jogadores
             return RepositorioJogadores.ObterJogador(id);
         }
 
+        [HttpPost]
+        public IActionResult Post (JogadorRequest request)
+        {
+           var jogadorAGravar = new JogadorTime(request.Nome);
+           RepositorioJogadores.GravarJogador(jogadorAGravar);
+           return CreatedAtAction(nameof(GetJogador), new {id = jogadorAGravar}, jogadorAGravar);
+        }
+
         [HttpPut("{id}")]
-        public Jogador PutJogador(Guid id, Jogador jogador)
+        public IActionResult PutJogador(Guid id, JogadorRequest jogador)
         {
             var jogadorRecuperado = RepositorioJogadores.ObterJogador(id);
             jogadorRecuperado.AdicionarNomeJogador(jogador.Nome);
-            return jogadorRecuperado;
+            return NoContent();
         }
 
-        [HttpPost]
-        public string Post (JogadorRequest request)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteJogador(Guid id)
         {
-           var Jogador = new JogadorTime(request.Nome);
-           return Jogador.Nome;
+            RepositorioJogadores.RemoverJogador(id);
+            return NoContent();
         }
     }
 }

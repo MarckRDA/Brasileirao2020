@@ -44,5 +44,19 @@ namespace WebAPI.Repositorio
         {
             return Jogadores.FirstOrDefault(jogador => jogador.Id == id);
         }
+
+        public static void GravarJogador(Jogador jogador)
+        {
+            Jogadores.Add(jogador);
+        }
+        
+        public static void RemoverJogador(Guid id)
+        {
+            if (!Jogadores.Exists(x => x.Id == id))
+            {
+                return;
+            }
+            Jogadores.Remove(ObterJogador(id));
+        }
     }
 }
