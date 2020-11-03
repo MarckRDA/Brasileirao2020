@@ -1,4 +1,6 @@
 
+
+
 namespace Domain.src
 {
     public sealed class TimeCampeonatoBrasileirao : Time
