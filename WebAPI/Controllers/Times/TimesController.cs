@@ -43,12 +43,21 @@ namespace WebAPI.Controllers.Times
             return NoContent();
         }
 
-        [HttpPost("{idTime}")]
-        public Time PostJogadoresAoTime(Guid idTime, [FromBody]List<Jogador> jogadores)
+        [HttpPost("{idTime}/Jogadores")]
+        public IActionResult PostJogadorAoTime(Guid idTime, JogadorRequest request)
         {
-            var timeAAdicionarJogadores = RepositorioTimes.ObterTime(idTime);
-            timeAAdicionarJogadores.AdicionarListaDeJogadores(jogadores);
-            return timeAAdicionarJogadores;
+            var jogadorAadicionar = new JogadorTime(request.Nome);
+            var timeAAdicionarJogador = RepositorioTimes.ObterTime(idTime);
+            if (!timeAAdicionarJogador.AdicionarJogador(jogadorAadicionar)) return BadRequest(); 
+            return NoContent();
+        }
+
+        [HttpPut("{idTime}")]
+        public IActionResult PutNomeTime(Guid idTime, TimeRequest request)
+        {
+            var timeAAtualizar = RepositorioTimes.ObterTime(idTime);
+            timeAAtualizar.ModificarNomeTime(request.Nome);
+            return NoContent();
         }
 
     }

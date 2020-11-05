@@ -17,6 +17,11 @@ namespace Domain.src
             NomeTime = nomeTime;
             Id = Guid.NewGuid();     
         }
+
+        public void ModificarNomeTime(string novoNomeTime)
+        {
+            NomeTime = novoNomeTime;
+        }
      
         public bool AdicionarJogador(Jogador jogador)
         {

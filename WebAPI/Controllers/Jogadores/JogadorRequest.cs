@@ -1,4 +1,4 @@
-namespace WebAPI.Controllers.Jogadores
+namespace WebAPI.Controllers
 {
     public class JogadorRequest 
     {

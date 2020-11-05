@@ -6,7 +6,7 @@ namespace WebAPI.Times
     public class TimeRequest
     {
         public string Nome { get; set; }
-        public List<Jogador> Jogadores {get; set;} = new List<Jogador>();  
+        public List<Jogador> Jogadores {get; set;} 
     
     }    
 }
