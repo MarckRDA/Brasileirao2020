@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Domain.src;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Repositorio;
 using WebAPI.Times;
@@ -60,5 +61,34 @@ namespace WebAPI.Controllers.Times
             return NoContent();
         }
 
+        [HttpPatch("{idTime}")]
+        public IActionResult PatchNomeTime(Guid idTime, TimeRequest request)
+        {
+            var timeAAtualizar = RepositorioTimes.ObterTime(idTime);
+            timeAAtualizar.ModificarNomeTime(request.Nome);
+            return Ok(timeAAtualizar);
+        }
+
+        [HttpPut("{idTime}/Jogadores/{idJogador}")]
+        public IActionResult PutJogadorTime(Guid idTime, Guid idJogador, JogadorRequest request)
+        {
+            var jogadorRecuperado = RepositorioTimes.ObterJogadorDoTime(idTime, idJogador);
+            jogadorRecuperado.AdicionarNomeJogador(request.Nome);
+            return NoContent();
+        }
+
+        [HttpDelete("{idTime}")]
+        public IActionResult DeleteTime(Guid idTime)
+        {
+            RepositorioTimes.RemoverTime(idTime);
+            return NoContent();
+        }
+
+        [HttpDelete("{idTime}/Jogadores/{idJogador}")]
+        public IActionResult DeleteJogador(Guid idTime, Guid IdJogador)
+        {
+            if (!RepositorioTimes.RemoverJogadorDoTime(idTime, IdJogador)) return Forbid();
+            return NoContent();
+        }
     }
 }
