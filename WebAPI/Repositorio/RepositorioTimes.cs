@@ -241,7 +241,7 @@ namespace WebAPI.Repositorio
 
         public static void AdicionarJogadoresAoTimes()
         {
-            Times.FirstOrDefault(t => t.NomeTime == "Atheltico").AdicionarListaDeJogadores(JogadoresAthletico);
+            // -> erro modificar Times.FirstOrDefault(t => t.NomeTime == "Atheltico").AdicionarListaDeJogadores(JogadoresAthletico);
             Times.FirstOrDefault(t => t.NomeTime == "Athletico Goianiense").AdicionarListaDeJogadores(JogadoresAtleticoGoianiense);
             Times.FirstOrDefault(t => t.NomeTime == "Athletico Mineiro").AdicionarListaDeJogadores(JogadoresAteticoMineiro);
             Times.FirstOrDefault(t => t.NomeTime == "Bahia").AdicionarListaDeJogadores(JogadoresBahia);

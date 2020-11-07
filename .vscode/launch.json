@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Tests/bin/Debug/netcoreapp3.1/Tests.dll",
+            "program": "${workspaceFolder}/WebAPI/bin/Debug/netcoreapp3.1/WebAPI.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Tests",
+            "cwd": "${workspaceFolder}/WebAPI",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "integratedTerminal",
             "stopAtEntry": false
