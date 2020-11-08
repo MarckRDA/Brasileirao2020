@@ -13,6 +13,7 @@ namespace WebAPI.Controllers.Jogadores
         [HttpGet]
         public List<Jogador> GetJogadores()
         {
+            
             return RepositorioJogadores.ObterJogadores();
         }
 
