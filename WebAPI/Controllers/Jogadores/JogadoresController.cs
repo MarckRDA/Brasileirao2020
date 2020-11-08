@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using WebAPI.Repositorio;
 using System;
 using Domain.src.Jogadores;
 
@@ -10,39 +9,44 @@ namespace WebAPI.Controllers.Jogadores
     [Route("Brasileirao2020/[Controller]")]
     public class JogadoresController : ControllerBase
     {
+        public readonly JogadorServices jogadorServices;
+
+        public JogadoresController()
+        {
+            jogadorServices = new JogadorServices();
+        }
+
         [HttpGet]
-        public List<Jogador> GetJogadores()
+        public List<JogadorDTO> GetJogadores()
         {
             
-            return RepositorioJogadores.ObterJogadores();
+            return jogadorServices.ObterJogadores();
         }
 
         [HttpGet("{id}")]
-        public Jogador GetJogador(Guid id)
+        public JogadorDTO GetJogador(Guid id)
         {
-            return RepositorioJogadores.ObterJogador(id);
+            return jogadorServices.ObterJogador(id);
         }
 
         [HttpPost]
         public IActionResult Post (JogadorRequest request)
         {
-           var jogadorAGravar = new JogadorTime(request.Nome);
-           RepositorioJogadores.GravarJogador(jogadorAGravar);
+           var jogadorAGravar = jogadorServices.CriarJogador(request.Nome);
            return CreatedAtAction(nameof(GetJogador), new {id = jogadorAGravar}, jogadorAGravar);
         }
 
         [HttpPut("{id}")]
-        public IActionResult PutJogador(Guid id, JogadorRequest jogador)
+        public IActionResult PutJogador(Guid id, JogadorRequest request)
         {
-            var jogadorRecuperado = RepositorioJogadores.ObterJogador(id);
-            jogadorRecuperado.AdicionarNomeJogador(jogador.Nome);
+            jogadorServices.ModificarNomeJogador(id, request.Nome);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteJogador(Guid id)
         {
-            RepositorioJogadores.RemoverJogador(id);
+            jogadorServices.RemoverJogador(id);
             return NoContent();
         }
     }

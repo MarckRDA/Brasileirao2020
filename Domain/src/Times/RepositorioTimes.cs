@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.src;
 using Domain.src.Jogadores;
-using Domain.src.Times;
 
-namespace WebAPI.Repositorio
+
+namespace Domain.src.Times
 {
     public static class RepositorioTimes
     {
-        private static List<Time> Times = new List<Time>()
+        private static List<Time> times = new List<Time>()
         {
             new TimeCampeonatoBrasileirao("Atheltico"),
             new TimeCampeonatoBrasileirao("Athletico Goianiense"),
@@ -20,6 +19,8 @@ namespace WebAPI.Repositorio
             new TimeCampeonatoBrasileirao("Ceara"),
             new TimeCampeonatoBrasileirao("Flamengo")
         };
+
+        public static IReadOnlyCollection<Time> Times => times;
 
 
         private static List<Jogador> JogadoresAthletico = new List<Jogador>()
@@ -241,22 +242,22 @@ namespace WebAPI.Repositorio
             new JogadorTime("Michael"),
         };
 
-        public static void AdicionarJogadoresAoTimes()
+        private static void AdicionarJogadoresAoTimes()
         {
-            // -> erro modificar Times.FirstOrDefault(t => t.NomeTime == "Atheltico").AdicionarListaDeJogadores(JogadoresAthletico);
-            Times.FirstOrDefault(t => t.NomeTime == "Athletico Goianiense").AdicionarListaDeJogadores(JogadoresAtleticoGoianiense);
-            Times.FirstOrDefault(t => t.NomeTime == "Athletico Mineiro").AdicionarListaDeJogadores(JogadoresAteticoMineiro);
-            Times.FirstOrDefault(t => t.NomeTime == "Bahia").AdicionarListaDeJogadores(JogadoresBahia);
-            Times.FirstOrDefault(t => t.NomeTime == "Botafogo").AdicionarListaDeJogadores(JogadoresBotafogo);
-            Times.FirstOrDefault(t => t.NomeTime == "Bragantino").AdicionarListaDeJogadores(JogadoresBragantino);
-            Times.FirstOrDefault(t => t.NomeTime == "Ceara").AdicionarListaDeJogadores(JogadoresCeara);
-            Times.FirstOrDefault(t => t.NomeTime == "Flamengo").AdicionarListaDeJogadores(JogadoresFlamengo);
+            times[0].AdicionarListaDeJogadores(JogadoresAthletico);
+            times[1].AdicionarListaDeJogadores(JogadoresAtleticoGoianiense);
+            times[2].AdicionarListaDeJogadores(JogadoresAteticoMineiro);
+            times[3].AdicionarListaDeJogadores(JogadoresBahia);
+            times[4].AdicionarListaDeJogadores(JogadoresBotafogo);
+            times[5].AdicionarListaDeJogadores(JogadoresBragantino);
+            times[6].AdicionarListaDeJogadores(JogadoresCeara);
+            times[7].AdicionarListaDeJogadores(JogadoresFlamengo);
         }
                 
         public static List<Time> ObterTimes()
         {
             AdicionarJogadoresAoTimes();
-            return Times;
+            return times;
         }
         public static Time ObterTime(Guid idTime)
         {
@@ -275,13 +276,13 @@ namespace WebAPI.Repositorio
 
         public static void AdicionarTime(Time timeAAdicionar)
         {
-            Times.Add(timeAAdicionar);
+            times.Add(timeAAdicionar);
         }
 
         public static void RemoverTime(Guid idTime)
         {
             var timeARemover = Times.FirstOrDefault(t => t.Id == idTime);
-            Times.Remove(timeARemover);
+            times.Remove(timeARemover);
         }
 
         public static bool AdicionarJogadorAoTime(Guid idTime, Jogador jogador)

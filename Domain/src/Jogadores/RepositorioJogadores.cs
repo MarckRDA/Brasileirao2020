@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Domain.src.Jogadores;
 
-namespace WebAPI.Repositorio
+namespace Domain.src.Jogadores
 {
     public class RepositorioJogadores
     {
-        private static List<Jogador> Jogadores { get; set; } = new List<Jogador>()
+        private static List<Jogador> jogadores = new List<Jogador>()
         {
             new JogadorTime("Santos"),
             new JogadorTime("Leo Gomes"),
@@ -34,28 +33,37 @@ namespace WebAPI.Repositorio
             new JogadorTime("Walter"),
         };
 
+        public IReadOnlyCollection<Jogador> Jogadores => jogadores;
+
         public static List<Jogador> ObterJogadores()
         {
-            return RepositorioJogadores.Jogadores;
+            return jogadores;
         }
 
         public static Jogador ObterJogador(Guid id)
         {
-            return Jogadores.FirstOrDefault(jogador => jogador.Id == id);
+            return jogadores.FirstOrDefault(jogador => jogador.Id == id);
         }
 
         public static void GravarJogador(Jogador jogador)
         {
-            Jogadores.Add(jogador);
+            jogadores.Add(jogador);
         }
         
         public static void RemoverJogador(Guid id)
         {
-            if (!Jogadores.Exists(x => x.Id == id))
+            if (!jogadores.Exists(x => x.Id == id))
             {
                 return;
             }
-            Jogadores.Remove(ObterJogador(id));
+            jogadores.Remove(ObterJogador(id));
+        }
+
+        public static Jogador ModificarNomeJogador (Guid id, string novoNome)
+        {
+            var jogador = ObterJogador(id);
+            jogador.AdicionarNomeJogador(novoNome);
+            return jogador;
         }
     }
 }
