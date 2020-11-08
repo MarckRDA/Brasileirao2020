@@ -5,8 +5,8 @@ namespace Domain.src.Users
 {
     public abstract class Usuario
     {
-        protected Guid Id { get; private set; } = new Guid();
-        protected string Name {get; private set;}
+        public Guid Id { get; private set; } = new Guid();
+        public string Name {get; private set;}
 
         public Usuario(string nome)
         {

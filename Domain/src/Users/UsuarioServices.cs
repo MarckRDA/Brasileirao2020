@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Domain.src.Users
@@ -25,6 +26,29 @@ namespace Domain.src.Users
         public List<Usuario> ObterUsuarios()
         {
             return UsuarioRepositorio.ObterUsuarios();
+        }
+
+        public Usuario ObterUsuario(Guid idUser)
+        {
+            return UsuarioRepositorio.ObterUsuario(idUser);
+        }
+
+        public bool AdicionarUsuario(string nome, string senha)
+        {
+            var novoUsuario = CriarUsuario(senha, nome);
+            
+            if (novoUsuario == null)
+            {
+                return false;   
+            }
+
+            UsuarioRepositorio.AdicionarUsuario(novoUsuario);
+            return true;
+        }
+
+        public void RemoverUsuario(Guid idUser)
+        {
+            UsuarioRepositorio.RemoverUsuario(idUser);
         }
     }
 }
