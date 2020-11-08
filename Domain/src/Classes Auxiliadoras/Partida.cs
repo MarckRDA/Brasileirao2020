@@ -1,4 +1,6 @@
-namespace Domain.src
+using Domain.src.Times;
+
+namespace Domain.src.ClassesAuxiliadoras
 {
     public abstract class Partida
     {

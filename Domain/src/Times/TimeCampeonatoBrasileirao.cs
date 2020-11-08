@@ -1,7 +1,9 @@
 
 
 
-namespace Domain.src
+using Domain.src.TabelaEstatistica;
+
+namespace Domain.src.Times
 {
     public sealed class TimeCampeonatoBrasileirao : Time
     {

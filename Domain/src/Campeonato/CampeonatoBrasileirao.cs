@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain.src.ClassesAuxiliadoras;
+using Domain.src.ExceptionsHandlers;
+using Domain.src.Jogadores;
+using Domain.src.Times;
+using Domain.src.Users;
 
-namespace Domain.src
+namespace Domain.src.Campeonato
 {
     public sealed class CampeonatoBrasileirao : ICampeonato // Criei uma interface com o intuíto de "extender" para um outro campeonato que não seja o brasileiro
     {

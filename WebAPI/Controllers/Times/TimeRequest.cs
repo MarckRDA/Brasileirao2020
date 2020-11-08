@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Domain.src;
+using Domain.src.Jogadores;
 
 namespace WebAPI.Times
 {

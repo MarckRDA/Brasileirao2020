@@ -1,4 +1,4 @@
-namespace Domain.src
+namespace Domain.src.Users
 {
     public sealed class Torcedor : Usuario
     {

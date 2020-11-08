@@ -1,4 +1,7 @@
-namespace Domain.src
+using Domain.src.Campeonato;
+
+
+namespace Domain.src.Factories
 {
     public class FabricaDeCampeonato
     {

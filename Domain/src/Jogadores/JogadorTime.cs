@@ -1,4 +1,4 @@
-namespace Domain.src
+namespace Domain.src.Jogadores
 {
     public sealed class JogadorTime : Jogador
     {

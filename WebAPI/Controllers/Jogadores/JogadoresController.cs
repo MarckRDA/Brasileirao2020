@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using Domain.src;
 using WebAPI.Repositorio;
 using System;
+using Domain.src.Jogadores;
 
 namespace WebAPI.Controllers.Jogadores
 {

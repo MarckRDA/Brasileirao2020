@@ -1,4 +1,6 @@
-namespace Domain.src
+using Domain.src.Users;
+
+namespace Domain.src.Factories
 {
     public class FabricaDeUsuarios
     {

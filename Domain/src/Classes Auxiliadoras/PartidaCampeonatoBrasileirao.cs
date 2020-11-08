@@ -1,4 +1,4 @@
-namespace Domain.src
+namespace Domain.src.ClassesAuxiliadoras
 {
     public sealed class PartidaCampeonatoBrasileirao : Partida
     {

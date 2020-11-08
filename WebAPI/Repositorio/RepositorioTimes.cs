@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Domain.src;
+using Domain.src.Jogadores;
+using Domain.src.Times;
 
 namespace WebAPI.Repositorio
 {

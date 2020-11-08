@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Domain.src
+namespace Domain.src.ClassesAuxiliadoras
 {
     public abstract class Rodada
     {

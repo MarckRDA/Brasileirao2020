@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Domain;
-using Domain.src;
+using Domain.src.Jogadores;
+using Domain.src.Times;
 using Xunit;
 
 namespace Tests

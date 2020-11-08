@@ -1,4 +1,4 @@
-namespace Domain.src
+namespace Domain.src.Users
 {
     public abstract class Usuario
     {

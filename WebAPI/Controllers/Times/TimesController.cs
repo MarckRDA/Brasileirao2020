@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Domain.src;
-using Microsoft.AspNetCore.JsonPatch;
+using Domain.src.Jogadores;
+using Domain.src.Times;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Repositorio;
 using WebAPI.Times;

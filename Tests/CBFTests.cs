@@ -1,4 +1,4 @@
-using Domain.src;
+using Domain.src.Users;
 using Xunit;
 
 namespace Tests

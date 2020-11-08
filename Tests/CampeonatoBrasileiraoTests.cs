@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Domain.src;
+using Domain.src.Campeonato;
+using Domain.src.ExceptionsHandlers;
+using Domain.src.Factories;
+using Domain.src.Jogadores;
+using Domain.src.Times;
+using Domain.src.Users;
 using Xunit;
 
 namespace Tests

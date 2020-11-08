@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Domain.src.ClassesAuxiliadoras;
+using Domain.src.Jogadores;
+using Domain.src.Times;
+using Domain.src.Users;
 
-
-namespace Domain.src
+namespace Domain.src.Campeonato
 {
     public interface ICampeonato
     {

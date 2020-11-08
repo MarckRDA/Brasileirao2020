@@ -1,5 +1,4 @@
-using Domain;
-using Domain.src;
+using Domain.src.Jogadores;
 using Xunit;
 
 namespace Tests
