@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Domain.src;
 using Domain.src.Campeonato;
 using Domain.src.ExceptionsHandlers;
 using Domain.src.Factories;
@@ -18,7 +17,7 @@ namespace Tests
         public void Deve_Retornar_Excecao_Permissao_Negada_Ao_Tentar_Inscrever_Times_Com_Usuário_Torcedor()
         {
             //Given
-            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var torcedor = new UsuarioServices().CriarUsuario("torcedor", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
 
             //When
@@ -31,7 +30,7 @@ namespace Tests
         public void Deve_Lancar_Excecao_Limite_Nao_Permitido_Ao_Tentar_Inscrever_Menos_De_Sete_Times_No_Campeonato()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
 
             //When
@@ -45,7 +44,7 @@ namespace Tests
         public void Deve_Lancar_Excecao_Permissao_Negada_Ao_Tentar_Inscrever_Times_No_Campeonato_Depois_Dele_Ter_Começado()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
             //When
@@ -59,10 +58,10 @@ namespace Tests
         public void Deve_Lancar_Excecao_Permissao_Negada_Ao_Tentar_Remover_Um_Jogador_Com_Usuario_Torcedor()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var torcedor = new UsuarioServices().CriarUsuario("torcedor", "Carlos");
             var idFlamengo = campeonatoBrasileirao.ObterListaTimes().First(x => x.NomeTime == "Flamengo").Id;
             var jogadorNatan = campeonatoBrasileirao.ObterListaTimes().First(x => x.Id == idFlamengo).Jogadores.First(x => x.Nome == "Natan");
 
@@ -76,10 +75,10 @@ namespace Tests
         public void Deve_Lancar_Excecao_Permissao_Negada_Ao_Tentar_Adicionar_Um_Jogador_Com_Usuario_Torcedor()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var torcedor = new UsuarioServices().CriarUsuario("torcedor", "Carlos");
             var idFlamengo = campeonatoBrasileirao.ObterListaTimes().First(x => x.NomeTime == "Flamengo").Id;
             var jogadorNatan = campeonatoBrasileirao.ObterListaTimes().First(x => x.Id == idFlamengo).Jogadores.First(x => x.Nome == "Natan");
 
@@ -91,7 +90,7 @@ namespace Tests
         [Fact]
         public void Deve_Retornar_Verdadeiro_Ao_Tentar_Remover_Um_Jogador_Com_Usuario_CBF()
         {
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
 
@@ -108,7 +107,7 @@ namespace Tests
         [Fact]
         public void Deve_Retornar_Verdadeiro_Ao_Tentar_Adicionar_Um_Jogador_Com_Usuario_CBF()
         {
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
 
@@ -126,7 +125,7 @@ namespace Tests
         public void Deve_Retornar_As_Partidas_Da_Primeira_Rodada()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
             
@@ -151,7 +150,7 @@ namespace Tests
         public void Deve_Afirmar_Que_Flamengo_Jogará_Com_Todos_Os_Times()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
 
@@ -178,10 +177,10 @@ namespace Tests
         public void Deve_Retornar_Excecao_Permissao_Negada_Ao_Tentar_Inscrever_Os_Resultados_Da_Partida()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
-            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var torcedor = new UsuarioServices().CriarUsuario("torcedor", "Carlos");
             
             //When
             var partidasAApresentar = new List<string>()
@@ -205,7 +204,7 @@ namespace Tests
         public void Deve_Inscrever_3_X_4_Na_Partida_Athletico_X_Athletico_Goianiense()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
             
@@ -239,7 +238,7 @@ namespace Tests
         public void Deve_Increver_Os_Resultados_Da_Primeira_Rodada()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             campeonatoBrasileirao.CadastrarTimes(cbf, GeradorDeTimesCompleto());
             
@@ -326,7 +325,7 @@ namespace Tests
         public void Deve_Retornar_A_Tabela_De_Pontos_Corridos()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             
             MockPrimeiraRodada(cbf, campeonatoBrasileirao);
@@ -358,7 +357,7 @@ namespace Tests
         public void Deve_Retornar_Resultados_Da_Rodada()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             MockPrimeiraRodada(cbf, campeonatoBrasileirao);
             
@@ -381,7 +380,7 @@ namespace Tests
         public void Deve_Retornar_A_Relacao_Dos_Artilheiros()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             MockPrimeiraRodada(cbf, campeonatoBrasileirao);
             var golsDudu = campeonatoBrasileirao.ObterListaTimes().FirstOrDefault(x => x.NomeTime == "Athletico Goianiense").Jogadores.FirstOrDefault(x => x.Nome == "Dudu").Gol; 
@@ -410,8 +409,8 @@ namespace Tests
         public void Deve_Retornar_Os_Times_Rebaixados()
         {
              //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
-            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
+            var torcedor = new UsuarioServices().CriarUsuario("torcedor", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             MockPrimeiraRodada(cbf, campeonatoBrasileirao);
             var provaveisTimesRebaixados = new List<string>()
@@ -433,8 +432,8 @@ namespace Tests
         public void Deve_Retornar_Os_Times_Classificados_Para_A_Libertadores()
         {
             //Given
-            var cbf = new FabricaDeUsuarios().CriarUsuario("admin");
-            var torcedor = new FabricaDeUsuarios().CriarUsuario("torcedor");
+            var cbf = new UsuarioServices().CriarUsuario("admin", "Carlos");
+            var torcedor = new UsuarioServices().CriarUsuario("torcedor", "Carlos");
             var campeonatoBrasileirao = new FabricaDeCampeonato().CriarCampeonato();
             MockPrimeiraRodada(cbf, campeonatoBrasileirao);
             var provaveisTimesClassificados = new List<string>()

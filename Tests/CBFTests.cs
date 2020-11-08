@@ -9,7 +9,7 @@ namespace Tests
         public void Should_Create_An_CBF_User()
         {
             //*Given
-            Usuario cbf = new CBF();
+            Usuario cbf = new CBF("Carlos");
 
             Assert.NotNull(cbf); 
         }
