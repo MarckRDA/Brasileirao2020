@@ -8,13 +8,15 @@ namespace Domain.src.Users
         public Guid Id { get; private set; } = new Guid();
         public string Name {get; private set;}
 
+        public string Senhar { get; private set; }
+
         public Usuario(string nome)
         {
             Id = Guid.NewGuid();
             Name = nome;
         }
 
-        public bool ValidarNomeUsuario()
+        private bool ValidarNomeUsuario()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name) || Name.StartsWith(" ") || Name.EndsWith(" ")) return false;
 

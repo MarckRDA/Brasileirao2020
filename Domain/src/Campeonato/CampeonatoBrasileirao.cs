@@ -54,9 +54,27 @@ namespace Domain.src.Campeonato
                 throw new LimiteNaoPermitidoException("Deverá inscrever mais de 8 times para o campeonato!!");
             }
 
-
             this.times = times;
             inicioCampeonato = true;
+            GerarTodasAsPartidas();
+        }
+
+        public void CadastrarTime(Usuario usuario, Time time)
+        {
+            if (!(usuario is CBF))
+            {
+                throw new PermissaoNegadaException("Você não tem permissão para executar essa operação!!");
+            }
+            else if (inicioCampeonato)
+            {
+                throw new PermissaoNegadaException("Você não pode fazer essa operação. O campeonato já começou!");
+            }
+            else if (times.Count > 8)
+            {
+                inicioCampeonato = true;
+            }
+
+            this.times = times;
             GerarTodasAsPartidas();
         }
 

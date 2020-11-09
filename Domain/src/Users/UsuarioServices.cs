@@ -23,11 +23,6 @@ namespace Domain.src.Users
             return null;
         }
 
-        public List<Usuario> ObterUsuarios()
-        {
-            return UsuarioRepositorio.ObterUsuarios();
-        }
-
         public Usuario ObterUsuario(Guid idUser)
         {
             return UsuarioRepositorio.ObterUsuario(idUser);

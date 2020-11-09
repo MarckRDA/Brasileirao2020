@@ -49,11 +49,18 @@ namespace WebAPI.Controllers.Times
             return NoContent();
         }
 
+        // [HttpPost("{idTime}/Jogadores")]
+        // public IActionResult PostJogadorAoTime(Guid idTime, JogadorRequest request)
+        // {
+        //     if (!timeServices.AdicionarJogadorAoTime(idTime, request.Nome)) return BadRequest("Nome Inválido");
+        //     return NoContent();
+        // }
+
         [HttpPost("{idTime}/Jogadores")]
-        public IActionResult PostJogadorAoTime(Guid idTime, JogadorRequest request)
+        public IActionResult PostJogadoresAoTime(Guid idTime, List<Jogador> jogadores)
         {
-            if (!timeServices.AdicionarJogadorAoTime(idTime, request.Nome)) return BadRequest("Nome Inválido");
-            return NoContent();
+            RepositorioTimes.AdicionarJogadoresAoTime(idTime, jogadores);
+            return Ok();
         }
 
         [HttpPut("{idTime}")]

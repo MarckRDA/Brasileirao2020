@@ -16,12 +16,6 @@ namespace WebAPI.Users
             usuarioServices = new UsuarioServices();
         }
 
-        [HttpGet]
-        public List<Usuario> GetUsuarios()
-        {
-            return usuarioServices.ObterUsuarios();
-        }
-
         [HttpGet("{idUser}")]
         public Usuario GetUsuario(Guid idUser)
         {
