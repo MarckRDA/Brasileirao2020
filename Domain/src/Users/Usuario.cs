@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Domain.src.Users
@@ -8,7 +9,7 @@ namespace Domain.src.Users
         public Guid Id { get; private set; } = new Guid();
         public string Name {get; private set;}
 
-        public string Senhar { get; private set; }
+        public string Senha { get; private set; }
 
         public Usuario(string nome)
         {
@@ -24,5 +25,17 @@ namespace Domain.src.Users
 
             return true;
         }
+
+       public (List<string> erros, bool eValido) Validar()
+       {
+           var erros = new List<string>();
+
+           if (!ValidarNomeUsuario())
+           {
+                erros.Add("Nome inválido");    
+           }
+
+           return (erros, erros.Count==0);
+       }
     }
 }

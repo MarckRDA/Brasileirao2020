@@ -5,22 +5,28 @@ namespace Domain.src.Users
 {
     public class UsuarioServices
     {
-        public Usuario CriarUsuario(string senha, string nome)
+        public Guid CriarUsuario(string senha, string nome)
         {
             if (senha == "admin")
             {
                 var novoAdmin = new CBF(nome);
-                UsuarioRepositorio.AdicionarUsuario(novoAdmin);
-                return novoAdmin;
+                if (novoAdmin.Validar().eValido)
+                {
+                    UsuarioRepositorio.AdicionarUsuario(novoAdmin);
+                }
+                return novoAdmin.Id;
             }
             else if (senha == "torcedor")
             {
                 var novoTorcedor = new Torcedor(nome);
-                UsuarioRepositorio.AdicionarUsuario(novoTorcedor);
-                return novoTorcedor;
+                if (novoTorcedor.Validar().eValido)
+                {
+                    UsuarioRepositorio.AdicionarUsuario(novoTorcedor);
+                }
+                return novoTorcedor.Id;
             }
 
-            return null;
+            return Guid.Empty;
         }
 
         public Usuario ObterUsuario(Guid idUser)
@@ -36,7 +42,7 @@ namespace Domain.src.Users
             {
                 return false;   
             }
-
+            
             UsuarioRepositorio.AdicionarUsuario(novoUsuario);
             return true;
         }
