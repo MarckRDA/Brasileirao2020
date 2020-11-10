@@ -5,7 +5,7 @@ namespace Domain.src.Users
 {
     public class UsuarioServices
     {
-        public Guid CriarUsuario(string senha, string nome)
+        public Usuario CriarUsuario(string senha, string nome)
         {
             if (senha == "admin")
             {
@@ -13,8 +13,10 @@ namespace Domain.src.Users
                 if (novoAdmin.Validar().eValido)
                 {
                     UsuarioRepositorio.AdicionarUsuario(novoAdmin);
+                    return novoAdmin;
                 }
-                return novoAdmin.Id;
+
+                return null;
             }
             else if (senha == "torcedor")
             {
@@ -22,11 +24,14 @@ namespace Domain.src.Users
                 if (novoTorcedor.Validar().eValido)
                 {
                     UsuarioRepositorio.AdicionarUsuario(novoTorcedor);
+                    return novoTorcedor;
                 }
-                return novoTorcedor.Id;
+
+                return null;
+
             }
 
-            return Guid.Empty;
+            return null;
         }
 
         public Usuario ObterUsuario(Guid idUser)
