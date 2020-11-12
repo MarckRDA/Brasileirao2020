@@ -4,5 +4,7 @@ namespace WebAPI.Users
     {
         public string Nome { get; set; }
         public string Senha { get; set; }
+
+        //ToDo : acrescentar propriedade
     }
 }
