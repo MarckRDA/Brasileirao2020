@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Domain.src.Users;
 using Microsoft.AspNetCore.Mvc;
 
