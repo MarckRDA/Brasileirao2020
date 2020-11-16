@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Domain.ClassesAuxiliadoras;
 using Domain.src.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -19,14 +18,19 @@ namespace WebAPI.Users
             usuarioServices = new UsuarioServices();
         }
 
+
         [HttpGet("{idUser}")]
         public Usuario GetUsuario(Guid idUser)
         {
             return usuarioServices.ObterUsuario(idUser);
         }
 
+        [HttpGet("Proibido")]
+        [Authorize(Roles = "cbf")]
+        public string Autorizado() => "Autorizado";
+
         [HttpPost("Login")]
-        public ActionResult<dynamic> Authenticate()
+        public ActionResult<dynamic> Authenticate(UsuarioRequest request)
         {
             StringValues usuarioId;
 
@@ -35,6 +39,10 @@ namespace WebAPI.Users
                 return Unauthorized();
             }
             var usuarioObtido = usuarioServices.ObterUsuario(Guid.Parse(usuarioId));
+            if (usuarioObtido.Name != request.Nome || usuarioObtido.Senha != request.Senha)
+            {
+                return Unauthorized();
+            }
 
             if (usuarioObtido == null)
             {
@@ -50,27 +58,19 @@ namespace WebAPI.Users
             };
         }
 
-        [HttpGet("Proibido")]
-        [Authorize(Roles = "cbf")]
-        public string Authenticado() => "Authenticado";
- 
  
         [HttpPost]
-        public IActionResult PostUsuario(Usuario request)
+        public IActionResult PostUsuario(UsuarioRequest request)
         {
-            if (!usuarioServices.AdicionarUsuario(request.Name, request.Senha, request.Tipo))
+            var usuarioAAdicionar = usuarioServices.AdicionarUsuario(request.Nome, request.Senha, request.Tipo);
+
+            if (!usuarioAAdicionar.isValid)
             {
                 return Unauthorized();
             }
 
-            return Ok();
+            return Ok(usuarioAAdicionar.id);
         }
 
-        [HttpDelete("{idUser}")]
-        public IActionResult DeleteUsuario(Guid idUser)
-        {
-            usuarioServices.RemoverUsuario(idUser);
-            return NoContent();
-        }
-    }
+     }
 }

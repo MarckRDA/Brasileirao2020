@@ -30,7 +30,7 @@ namespace Tests
             var jogador = new JogadorTime(name);
 
             //When
-            var isValid = jogador.ValidarNomeJogador();
+            var isValid = jogador.Validar().isValid;
 
             //Then
             Assert.False(isValid);
@@ -45,7 +45,7 @@ namespace Tests
             var jogador = new JogadorTime(name);
 
             //When
-            var isValid = jogador.ValidarNomeJogador();
+            var isValid = jogador.Validar().isValid;
 
             //Then
             Assert.True(isValid);

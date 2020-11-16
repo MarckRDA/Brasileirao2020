@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Domain.src.Users
 {
@@ -38,17 +37,17 @@ namespace Domain.src.Users
             return UsuarioRepositorio.ObterUsuario(idUser);
         }
 
-        public bool AdicionarUsuario(string nome, string senha, string tipo)
+        public (bool isValid, Guid id) AdicionarUsuario(string nome, string senha, string tipo)
         {
             var novoUsuario = CriarUsuario(senha, nome, tipo);
-            
+
             if (novoUsuario == null)
             {
-                return false;   
+                return (false, Guid.Empty);
             }
-            
+
             UsuarioRepositorio.AdicionarUsuario(novoUsuario);
-            return true;
+            return (true, novoUsuario.Id);
         }
 
         public void RemoverUsuario(Guid idUser)

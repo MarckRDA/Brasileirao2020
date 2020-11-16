@@ -82,7 +82,7 @@ namespace Domain.src.Times
         {
             var jogadorAAtualizar = RepositorioTimes.ObterJogadorDoTime(idTime, idJogador);
             jogadorAAtualizar.AdicionarNomeJogador(nomeNovoJogador);
-            if (!jogadorAAtualizar.ValidarNomeJogador())
+            if (!jogadorAAtualizar.Validar().isValid)
             {
                 return false;
             }

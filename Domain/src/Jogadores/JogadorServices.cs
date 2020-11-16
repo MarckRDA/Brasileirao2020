@@ -9,6 +9,10 @@ namespace Domain.src.Jogadores
         public JogadorDTO CriarJogador(string nome)
         {
             var novoJogador = new JogadorTime(nome);
+            if (!novoJogador.Validar().isValid)
+            {
+                return null;    
+            }
             RepositorioJogadores.GravarJogador(novoJogador);
             return new JogadorDTO
             {
@@ -36,9 +40,20 @@ namespace Domain.src.Jogadores
             };
         }
 
-        public string ModificarNomeJogador(Guid idJogador, string novoNome)
+        public JogadorDTO AtualizarJogador(Guid idJogador, string novoNome)
         {
-            return RepositorioJogadores.ModificarNomeJogador(idJogador, novoNome).Nome;
+            var jogadorAAtualizar = RepositorioJogadores.AtualizarJogador(idJogador, novoNome);
+            
+            if (jogadorAAtualizar == null)
+            {
+                return null;
+            }
+
+            return new JogadorDTO 
+            {
+                Id = jogadorAAtualizar.Id,
+                Nome = jogadorAAtualizar.Nome
+            };
         }
 
         public void RemoverJogador(Guid idJogador)

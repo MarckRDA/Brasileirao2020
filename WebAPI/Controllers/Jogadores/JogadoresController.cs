@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System;
 using Domain.src.Jogadores;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Primitives;
 
 namespace WebAPI.Controllers.Jogadores
 {
@@ -17,33 +19,55 @@ namespace WebAPI.Controllers.Jogadores
         }
 
         [HttpGet]
+        [Authorize]
         public List<JogadorDTO> GetJogadores()
         {
-            
             return jogadorServices.ObterJogadores();
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "cbf")]
         public JogadorDTO GetJogador(Guid id)
         {
             return jogadorServices.ObterJogador(id);
         }
 
         [HttpPost]
-        public IActionResult Post (JogadorRequest request)
+        [Authorize(Roles = "cbf")]
+        public IActionResult PostJogador(JogadorRequest request)
         {
-           var jogadorAGravar = jogadorServices.CriarJogador(request.Nome);
-           return CreatedAtAction(nameof(GetJogador), new {id = jogadorAGravar}, jogadorAGravar);
+            StringValues userId;
+            
+            if (!Request.Headers.TryGetValue("userId", out userId))
+            {
+                return Unauthorized();
+            }
+
+            var jogadorAGravar = jogadorServices.CriarJogador(request.Nome);
+            
+            if (jogadorAGravar == null)
+            {
+                return BadRequest();    
+            }
+
+            return CreatedAtAction(nameof(GetJogador), new { id = jogadorAGravar }, jogadorAGravar);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "cbf")]
         public IActionResult PutJogador(Guid id, JogadorRequest request)
         {
-            jogadorServices.ModificarNomeJogador(id, request.Nome);
+            var jogadorAAtualizar = jogadorServices.AtualizarJogador(id, request.Nome);
+
+            if (jogadorAAtualizar == null)
+            {
+                return BadRequest();
+            }
             return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "cbf")]
         public IActionResult DeleteJogador(Guid id)
         {
             jogadorServices.RemoverJogador(id);

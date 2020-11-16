@@ -59,11 +59,19 @@ namespace Domain.src.Jogadores
             jogadores.Remove(ObterJogador(id));
         }
 
-        public static Jogador ModificarNomeJogador (Guid id, string novoNome)
+        public static Jogador AtualizarJogador (Guid id, string novoNome)
         {
             var jogador = ObterJogador(id);
-            jogador.AdicionarNomeJogador(novoNome);
-            return jogador;
+            var jogadorAAdicionar = new JogadorTime(novoNome);
+            
+            if (!jogadorAAdicionar.Validar().isValid)
+            {
+                return null;    
+            }
+            jogadores.Remove(jogador);
+            jogadores.Add(jogadorAAdicionar);
+
+            return jogadorAAdicionar; 
         }
     }
 }
