@@ -9,7 +9,7 @@ namespace Tests
         public void Should_Create_An_Torcedor_User()
         {
             //*Given
-            Usuario carla = new Torcedor("Carlos");
+            Usuario carla = new Torcedor("Carlos", "tavtav", "torcedor");
             
             //*Then
             Assert.NotNull(carla);
