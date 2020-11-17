@@ -36,7 +36,7 @@ namespace Tests
             var time = new TimeCampeonatoBrasileirao(name);
 
             //When
-            var isValid = time.ValidarNomeTime();
+            var isValid = time.Validar().isValid;
 
             //Then
             Assert.False(isValid);
@@ -51,7 +51,7 @@ namespace Tests
             var time = new TimeCampeonatoBrasileirao(name);
 
             //When
-            var isValid = time.ValidarNomeTime();
+            var isValid = time.Validar().isValid;
 
             //Then
             Assert.True(isValid);

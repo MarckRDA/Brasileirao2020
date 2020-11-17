@@ -26,7 +26,7 @@ namespace WebAPI.Controllers.Jogadores
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "cbf")]
+        [Authorize]
         public JogadorDTO GetJogador(Guid id)
         {
             return jogadorServices.ObterJogador(id);
@@ -38,7 +38,7 @@ namespace WebAPI.Controllers.Jogadores
         {
             StringValues userId;
             
-            if (!Request.Headers.TryGetValue("userId", out userId))
+            if (!Request.Headers.TryGetValue("UserId", out userId))
             {
                 return Unauthorized();
             }
@@ -63,7 +63,7 @@ namespace WebAPI.Controllers.Jogadores
             {
                 return BadRequest();
             }
-            return NoContent();
+            return Ok(jogadorAAtualizar.Id);
         }
 
         [HttpDelete("{id}")]

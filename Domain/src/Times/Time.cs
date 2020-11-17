@@ -30,7 +30,7 @@ namespace Domain.src.Times
             if (jogadores.Exists(j => j.Id == jogador.Id)) return false;
             
             if (jogadores.Count > 32 ) return false;
-
+            jogador.IdTime = Id;
             jogadores.Add(jogador);
             return true;
         }
@@ -49,12 +49,24 @@ namespace Domain.src.Times
         public bool AdicionarListaDeJogadores(List<Jogador> jogadores)
         {
             if (jogadores.Count < 16 || jogadores.Count > 32 ) return false;
-
+            jogadores.Select(j => j.IdTime=Id);            
             this.jogadores = jogadores;
             return true;
         }
 
-        public bool ValidarNomeTime()
+        public (bool isValid, List<string> errors) Validar()
+        {
+            var erros = new List<string>();
+
+            if (!ValidarNomeTime())
+            {
+                erros.Add("Nome inválido");    
+            }
+
+            return(erros.Count == 0, erros);
+        }
+
+        private bool ValidarNomeTime()
         {
             if (string.IsNullOrEmpty(NomeTime) || string.IsNullOrWhiteSpace(NomeTime) || NomeTime.StartsWith(" ") || NomeTime.EndsWith(" ")) return false;
 

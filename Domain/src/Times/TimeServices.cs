@@ -14,7 +14,7 @@ namespace Domain.src.Times
                 Id = t.Id,
                 NomeTime = t.NomeTime,
                 Jogadores = t.Jogadores.Select(j => new JogadorDTO {Id = j.Id, Nome = j
-                .Nome, Gol = j.Gol}).ToList(),
+                .Nome, IdTime = j.Id, Gol = j.Gol}).ToList(),
                 Tabela = t.Tabela
             }).ToList();
         }
@@ -26,12 +26,12 @@ namespace Domain.src.Times
             {
                 Id = timeRecuperado.Id,
                 NomeTime = timeRecuperado.NomeTime,
-                Jogadores = timeRecuperado.Jogadores.Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, Gol = j.Gol}).ToList(),
+                Jogadores = timeRecuperado.Jogadores.Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, IdTime = j.IdTime ,Gol = j.Gol}).ToList(),
                 Tabela = timeRecuperado.Tabela
             };
         }
 
-        public List<JogadorDTO> ObterJogadoresDoTime(Guid idTime) => RepositorioTimes.ObterJogadoresDoTime(idTime).Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, Gol = j.Gol}).ToList();
+        public List<JogadorDTO> ObterJogadoresDoTime(Guid idTime) => RepositorioTimes.ObterJogadoresDoTime(idTime).Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, IdTime = j.IdTime,Gol = j.Gol}).ToList();
         
         public JogadorDTO ObterJogadorDoTime(Guid idTime, Guid idJogador)
         {
@@ -40,14 +40,21 @@ namespace Domain.src.Times
             {
                 Id = jogadorRecuperado.Id,
                 Nome = jogadorRecuperado.Nome,
+                IdTime = jogadorRecuperado.IdTime,
                 Gol = jogadorRecuperado.Gol
             };
         }
 
-        public void AdicionarTime(string nomeTime)
+        public bool AdicionarTime(string nomeTime)
         {
             var novoTime = new TimeCampeonatoBrasileirao(nomeTime);
+            if (!novoTime.Validar().isValid)
+            {
+                return false;
+            }
+            
             RepositorioTimes.AdicionarTime(novoTime);
+            return true;
         }
 
         public void RemoverTime(Guid idTime)
@@ -58,6 +65,11 @@ namespace Domain.src.Times
         public bool AdicionarJogadorAoTime(Guid idTime, string nomeJogador)
         {
             var jogadorAAdicionar = new JogadorTime(nomeJogador);
+            if (!jogadorAAdicionar.Validar().isValid)
+            {
+                return false;
+            }
+            jogadorAAdicionar.IdTime = idTime;
             return RepositorioTimes.AdicionarJogadorAoTime(idTime, jogadorAAdicionar);
         }
 
@@ -66,14 +78,18 @@ namespace Domain.src.Times
             return RepositorioTimes.RemoverJogadorDoTime(idTime, idJogador);
         }
 
-        public bool ModificarNomeTime(Guid idTime, string nomeNovoTime)
+        public bool ModificarTime(Guid idTime, string nomeNovoTime)
         {
             var timeAAtualizar = RepositorioTimes.ObterTime(idTime);
+            var nomeAntigo = timeAAtualizar.NomeTime;
+
             timeAAtualizar.ModificarNomeTime(nomeNovoTime);
-            if (!timeAAtualizar.ValidarNomeTime())
+            if (!timeAAtualizar.Validar().isValid)
             {
+                timeAAtualizar.ModificarNomeTime(nomeAntigo);
                 return false;
             }
+
             return true;
         }
 
@@ -81,11 +97,14 @@ namespace Domain.src.Times
         public bool ModificarNomeJogador(Guid idTime, Guid idJogador, string nomeNovoJogador)
         {
             var jogadorAAtualizar = RepositorioTimes.ObterJogadorDoTime(idTime, idJogador);
+            var nomeAntigo = jogadorAAtualizar.Nome;
             jogadorAAtualizar.AdicionarNomeJogador(nomeNovoJogador);
             if (!jogadorAAtualizar.Validar().isValid)
             {
+                jogadorAAtualizar.AdicionarNomeJogador(nomeAntigo);
                 return false;
             }
+            
             return true;
         }
     }

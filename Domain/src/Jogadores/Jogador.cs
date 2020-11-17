@@ -9,7 +9,7 @@ namespace Domain.src.Jogadores
         public Guid Id { get; private set; } = new Guid();
         public string Nome { get; private set; }
         public int Gol { get; private set;}
-
+        public Guid IdTime { get; set; }
         public Jogador(string nome)
         {
             Nome = nome;

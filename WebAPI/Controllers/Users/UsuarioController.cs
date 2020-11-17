@@ -1,5 +1,6 @@
 using System;
 using Domain.ClassesAuxiliadoras;
+using Domain.src.ClassesAuxiliadoras;
 using Domain.src.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,21 +26,18 @@ namespace WebAPI.Users
             return usuarioServices.ObterUsuario(idUser);
         }
 
-        [HttpGet("Proibido")]
-        [Authorize(Roles = "cbf")]
-        public string Autorizado() => "Autorizado";
-
         [HttpPost("Login")]
         public ActionResult<dynamic> Authenticate(UsuarioRequest request)
         {
             StringValues usuarioId;
+            var md5 = new CriadorMD5();
 
-            if (!Request.Headers.TryGetValue("UsuarioId", out usuarioId))
+            if (!Request.Headers.TryGetValue("UserId", out usuarioId))
             {
                 return Unauthorized();
             }
             var usuarioObtido = usuarioServices.ObterUsuario(Guid.Parse(usuarioId));
-            if (usuarioObtido.Name != request.Nome || usuarioObtido.Senha != request.Senha)
+            if (usuarioObtido.Name != request.Nome || !md5.ComparaMD5(request.Senha, usuarioObtido.Senha))
             {
                 return Unauthorized();
             }
@@ -62,7 +60,9 @@ namespace WebAPI.Users
         [HttpPost]
         public IActionResult PostUsuario(UsuarioRequest request)
         {
-            var usuarioAAdicionar = usuarioServices.AdicionarUsuario(request.Nome, request.Senha, request.Tipo);
+            var md5 = new CriadorMD5();
+            var senhaCriptografada = md5.RetornarMD5(request.Senha);
+            var usuarioAAdicionar = usuarioServices.AdicionarUsuario(request.Nome, senhaCriptografada, request.Tipo);
 
             if (!usuarioAAdicionar.isValid)
             {
