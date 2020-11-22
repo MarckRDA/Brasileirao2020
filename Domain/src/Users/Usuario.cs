@@ -4,19 +4,24 @@ using System.Linq;
 
 namespace Domain.src.Users
 {
-    public abstract class Usuario
+    public class Usuario
     {
         public Guid Id { get; private set; } = new Guid();
         public string Name {get; private set;}
-        public string Tipo { get; set; }        
+        public Perfil Perfil { get; set; }        
         public string Senha { get; private set; }
 
-        public Usuario(string nome, string senha, string tipo)
+        public Usuario(string nome, string senha, Perfil perfil)
         {
             Id = Guid.NewGuid();
             Name = nome;
             Senha = senha;
-            Tipo = tipo;
+            Perfil = perfil;
+        }
+
+        public Usuario()
+        {
+            
         }
 
         private bool ValidarNomeUsuario()

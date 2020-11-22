@@ -20,7 +20,7 @@ namespace Domain.ClassesAuxiliadoras
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, usuario.Name),
-                    new Claim(ClaimTypes.Role, usuario.Tipo)
+                    new Claim(ClaimTypes.Role, usuario.Perfil.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

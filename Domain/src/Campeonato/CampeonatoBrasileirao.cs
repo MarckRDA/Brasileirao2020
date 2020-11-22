@@ -41,7 +41,7 @@ namespace Domain.src.Campeonato
         */
         public void CadastrarTimes(Usuario usuario, List<Time> times)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Você não tem permissão para executar essa operação!!");
             }
@@ -61,7 +61,7 @@ namespace Domain.src.Campeonato
 
         public void CadastrarTime(Usuario usuario, Time time)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Você não tem permissão para executar essa operação!!");
             }
@@ -85,7 +85,7 @@ namespace Domain.src.Campeonato
 
         public bool RemoverJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Essa função só pode ser acessada como CBF!");
             }
@@ -99,7 +99,7 @@ namespace Domain.src.Campeonato
 
         public bool AdicionarJogadorTime(Usuario usuario, Guid idTime, Jogador jogador)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Essa função só pode ser acessada como CBF!");
             }
@@ -160,7 +160,7 @@ namespace Domain.src.Campeonato
 
         public bool InscreverResultadoDaPartida(Usuario usuario, int partida, int golsAnfitriao, int golsVisitante)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Essa função só pode ser acessada como CBF!");
             }
@@ -188,7 +188,7 @@ namespace Domain.src.Campeonato
         */
         public bool RegistrarJogadoresGoleadoresDaPartida(Usuario usuario, string timeVencedor, string nomeJogador, int golFeitos)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Você não é permitido para a acessar essa função");
             }
@@ -213,7 +213,7 @@ namespace Domain.src.Campeonato
         */
         public bool RegistrarRodada(Usuario usuario)
         {
-            if (!(usuario is CBF))
+            if (!(usuario.Perfil == Perfil.CBF))
             {
                 throw new PermissaoNegadaException("Você não é permitido para a acessar essa função");
             }
@@ -227,7 +227,7 @@ namespace Domain.src.Campeonato
         */
         public List<string> ExibirResultadoDaRodada(Usuario usuario, int rodadaDesejada)
         {
-            if (!(usuario is CBF || usuario is Torcedor))
+            if (!(usuario.Perfil == Perfil.CBF || usuario.Perfil == Perfil.Torcedor))
             {
                 return null;
             }
@@ -250,7 +250,7 @@ namespace Domain.src.Campeonato
         */
         public List<string> ApresentarTabela(Usuario usuario)
         {
-            if (!(usuario is CBF || usuario is Torcedor))
+            if (!(usuario.Perfil == Perfil.CBF || usuario.Perfil == Perfil.CBF))
             {
                 return null;
             }
@@ -275,7 +275,7 @@ namespace Domain.src.Campeonato
         */
         public List<string> ExibirTimesClassificadosLibertadores(Usuario usuario)
         {
-            if (!(usuario is CBF || usuario is Torcedor))
+            if (!(usuario.Perfil == Perfil.CBF || usuario.Perfil == Perfil.CBF))
             {
                 return null;
             }
@@ -296,7 +296,7 @@ namespace Domain.src.Campeonato
         public List<string> ExibirTimesRebaixados(Usuario usuario)
         {
 
-            if (!(usuario is CBF || usuario is Torcedor))
+            if (!(usuario.Perfil == Perfil.CBF || usuario.Perfil == Perfil.CBF))
             {
                 return null;
             }
@@ -311,7 +311,7 @@ namespace Domain.src.Campeonato
 
         public List<string> ExibirClassificacaoDeArtilheiros(Usuario usuario)
         {
-            if (!(usuario is CBF || usuario is Torcedor))
+            if (!(usuario.Perfil == Perfil.CBF || usuario.Perfil == Perfil.CBF))
             {
                 return null;
             }

@@ -1,32 +1,48 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Doamin.src.Users;
+using Domain.src.Infra;
 
 namespace Domain.src.Users
 {
-    public static class UsuarioRepositorio
+    public class UsuarioRepositorio : IUsuarioRepositorio
     {
-        private static List<Usuario> usuarios = new List<Usuario>();
-        public static IReadOnlyCollection<Usuario> Usuarios => usuarios;
-
-        public static void AdicionarUsuario(Usuario usuario)
+        public void AdicionarUsuario(Usuario usuario)
         {
-            usuarios.Add(usuario);
+            using (var _context = new BrasileiraoContext())
+            {
+                _context.Add(usuario);
+                _context.SaveChanges();
+            }
+
         }
 
-        public static List<Usuario> ObterUsuarios()
+        public IEnumerable<Usuario> ObterUsuarios()
         {
-            return usuarios;
+            using (var _context = new BrasileiraoContext())
+            {
+                return _context.Usuarios.ToList();
+            }
         }
 
-        public static Usuario ObterUsuario(Guid idUser)
+        public Usuario ObterUsuario(Guid idUser)
         {
-            return usuarios.FirstOrDefault(u => u.Id == idUser);
+            using (var _context = new BrasileiraoContext())
+            {
+                return _context.Usuarios.FirstOrDefault(u => u.Id == idUser);
+            }
         }
 
-        public static void RemoverUsuario(Guid idUsuario)
+        public void RemoverUsuario(Guid idUsuario)
         {
-            usuarios.Remove(usuarios.FirstOrDefault(u => u.Id == idUsuario));
+            using (var _context = new BrasileiraoContext())
+            {
+                var usuarioARemover = _context.Usuarios.FirstOrDefault(u => u.Id == idUsuario);
+                _context.Usuarios.Remove(usuarioARemover);
+                _context.SaveChanges();
+            }
+
         }
 
     }

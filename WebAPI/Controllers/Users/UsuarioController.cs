@@ -2,7 +2,6 @@ using System;
 using Domain.ClassesAuxiliadoras;
 using Domain.src.ClassesAuxiliadoras;
 using Domain.src.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 
@@ -12,13 +11,7 @@ namespace WebAPI.Users
     [Route("Brasileirao2020/[Controller]")]
     public class UsuariosController : ControllerBase
     {
-        private readonly UsuarioServices usuarioServices;
-
-        public UsuariosController()
-        {
-            usuarioServices = new UsuarioServices();
-        }
-
+        private readonly UsuarioServices usuarioServices = new UsuarioServices();
 
         [HttpGet("{idUser}")]
         public Usuario GetUsuario(Guid idUser)
@@ -62,7 +55,7 @@ namespace WebAPI.Users
         {
             var md5 = new CriadorMD5();
             var senhaCriptografada = md5.RetornarMD5(request.Senha);
-            var usuarioAAdicionar = usuarioServices.AdicionarUsuario(request.Nome, senhaCriptografada, request.Tipo);
+            var usuarioAAdicionar = usuarioServices.AdicionarUsuario(request.Nome, senhaCriptografada, request.Perfil);
 
             if (!usuarioAAdicionar.isValid)
             {

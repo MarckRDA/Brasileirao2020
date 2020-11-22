@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Text;
 using Doamin.src;
+using Doamin.src.Users;
 using Domain.src.Infra;
+using Domain.src.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -28,7 +30,6 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-                 
             services.AddCors();
             services.AddControllers();
 
@@ -79,6 +80,11 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            using (var _context = new BrasileiraoContext())
+            {
+                _context.Database.Migrate();
             }
 
             app.UseHttpsRedirection();

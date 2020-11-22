@@ -33,7 +33,7 @@ namespace WebAPI.Controllers.Jogadores
         }
 
         [HttpPost]
-        [Authorize(Roles = "cbf")]
+        [Authorize(Roles = "0")]
         public IActionResult PostJogador(JogadorRequest request)
         {
             StringValues userId;
@@ -54,7 +54,7 @@ namespace WebAPI.Controllers.Jogadores
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "cbf")]
+        [Authorize(Roles = "0")]
         public IActionResult PutJogador(Guid id, JogadorRequest request)
         {
             var jogadorAAtualizar = jogadorServices.AtualizarJogador(id, request.Nome);
@@ -67,7 +67,7 @@ namespace WebAPI.Controllers.Jogadores
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = "cbf")]
+        [Authorize(Roles = "0")]
         public IActionResult DeleteJogador(Guid id)
         {
             jogadorServices.RemoverJogador(id);
