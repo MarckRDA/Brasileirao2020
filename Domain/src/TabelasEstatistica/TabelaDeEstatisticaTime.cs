@@ -1,9 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.src.TabelaEstatistica
 {
     public abstract class TabelaDeEstatisticaTime 
     {
+        public Guid IdTabela { get; set; }
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
         public int Vitorias { get; private set; } 
@@ -15,9 +17,7 @@ namespace Domain.src.TabelaEstatistica
         public int GolsContra { get; private set;} 
         public int SaldoDeGols {get; private set;}
         public double PercentagemAproveitamento { get; private set;} = 0.0;
-
-      
-       
+    
         
         public void DisputarPartida()
         {

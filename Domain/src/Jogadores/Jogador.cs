@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Domain.src.Jogadores
@@ -7,6 +8,8 @@ namespace Domain.src.Jogadores
     public abstract class Jogador
     {
         public Guid Id { get; private set; } = new Guid();
+        
+        [Column(TypeName = "varchar(100)")]
         public string Nome { get; private set; }
         public int Gol { get; private set;}
         public Guid IdTime { get; set; }

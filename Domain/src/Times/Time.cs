@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Domain.src.Jogadores;
 using Domain.src.TabelaEstatistica;
@@ -12,7 +13,10 @@ namespace Domain.src.Times
         public string NomeTime {get; private set;}
         private List<Jogador> jogadores { get; set;} = new List<Jogador>();
         public IReadOnlyCollection<Jogador> Jogadores => jogadores;
+        
+        [NotMapped]
         public TabelaDeEstatisticaTime Tabela{get; set;}
+        public Guid IdTabela {get; set;} 
      
         public Time(string nomeTime)
         {
