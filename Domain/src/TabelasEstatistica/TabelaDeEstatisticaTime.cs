@@ -5,7 +5,8 @@ namespace Domain.src.TabelaEstatistica
 {
     public abstract class TabelaDeEstatisticaTime 
     {
-        public Guid IdTabela { get; set; }
+        public Guid Id { get; set; }
+        public Guid TimeId { get; set;}    
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
         public int Vitorias { get; private set; } 
@@ -17,7 +18,7 @@ namespace Domain.src.TabelaEstatistica
         public int GolsContra { get; private set;} 
         public int SaldoDeGols {get; private set;}
         public double PercentagemAproveitamento { get; private set;} = 0.0;
-    
+
         
         public void DisputarPartida()
         {

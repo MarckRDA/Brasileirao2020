@@ -32,22 +32,22 @@ namespace Domain.Migrations
                     b.Property<int>("Gol")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("IdTime")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Fk_Time");
-
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid?>("TimeId")
+                    b.Property<Guid>("TimeId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Fk_Time");
+
+                    b.Property<Guid?>("TimeId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdTime");
-
                     b.HasIndex("TimeId");
+
+                    b.HasIndex("TimeId1");
 
                     b.ToTable("Jogadores");
 
@@ -56,7 +56,7 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.src.TabelaEstatistica.TabelaDeEstatisticaTime", b =>
                 {
-                    b.Property<Guid>("IdTabela")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -88,10 +88,13 @@ namespace Domain.Migrations
                     b.Property<int>("SaldoDeGols")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("TimeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("Vitorias")
                         .HasColumnType("int");
 
-                    b.HasKey("IdTabela");
+                    b.HasKey("Id");
 
                     b.ToTable("TabelasEstatistica");
 
@@ -108,15 +111,15 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("IdTabela")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("NomeTime")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("TabelaId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdTabela")
+                    b.HasIndex("TabelaId")
                         .IsUnique();
 
                     b.ToTable("Times");
@@ -171,20 +174,20 @@ namespace Domain.Migrations
                 {
                     b.HasOne("Domain.src.Times.Time", null)
                         .WithMany()
-                        .HasForeignKey("IdTime")
+                        .HasForeignKey("TimeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.src.Times.Time", null)
                         .WithMany("Jogadores")
-                        .HasForeignKey("TimeId");
+                        .HasForeignKey("TimeId1");
                 });
 
             modelBuilder.Entity("Domain.src.Times.Time", b =>
                 {
                     b.HasOne("Domain.src.TabelaEstatistica.TabelaDeEstatisticaTime", null)
                         .WithOne()
-                        .HasForeignKey("Domain.src.Times.Time", "IdTabela")
+                        .HasForeignKey("Domain.src.Times.Time", "TabelaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

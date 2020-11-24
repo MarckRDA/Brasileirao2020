@@ -37,11 +37,11 @@ namespace Domain.src.Infra
             modelBuilder.Entity<Jogador>()
             .HasOne<Time>()
             .WithMany()
-            .HasForeignKey(j => j.IdTime);
+            .HasForeignKey(j => j.TimeId);
             modelBuilder.Entity<Jogador>()
             .Property(j => j.Nome).IsRequired();
             modelBuilder.Entity<Jogador>()
-            .Property(j => j.IdTime)
+            .Property(j => j.TimeId)
             .HasColumnName("Fk_Time");
             
             modelBuilder.Entity<Time>()
@@ -49,11 +49,11 @@ namespace Domain.src.Infra
             modelBuilder.Entity<Time>()
             .HasOne<TabelaDeEstatisticaTime>()
             .WithOne()
-            .HasForeignKey<Time>(t => t.IdTabela);            
+            .HasForeignKey<Time>(t => t.TabelaId);            
 
             modelBuilder.Entity<TabelaDeEstatisticaTime>()
-            .HasKey(tb => tb.IdTabela);
-            
+            .HasKey(tb => tb.Id);
+             
 
         }   
               

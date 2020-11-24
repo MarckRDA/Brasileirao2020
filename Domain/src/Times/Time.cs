@@ -16,7 +16,7 @@ namespace Domain.src.Times
         
         [NotMapped]
         public TabelaDeEstatisticaTime Tabela{get; set;}
-        public Guid IdTabela {get; set;} 
+        public Guid TabelaId {get; set;} 
      
         public Time(string nomeTime)
         {
@@ -34,7 +34,7 @@ namespace Domain.src.Times
             if (jogadores.Exists(j => j.Id == jogador.Id)) return false;
             
             if (jogadores.Count > 32 ) return false;
-            jogador.IdTime = Id;
+            jogador.TimeId = Id;
             jogadores.Add(jogador);
             return true;
         }
@@ -53,7 +53,7 @@ namespace Domain.src.Times
         public bool AdicionarListaDeJogadores(List<Jogador> jogadores)
         {
             if (jogadores.Count < 16 || jogadores.Count > 32 ) return false;
-            jogadores.Select(j => j.IdTime=Id);            
+            jogadores.Select(j => j.TimeId=Id);            
             this.jogadores = jogadores;
             return true;
         }
