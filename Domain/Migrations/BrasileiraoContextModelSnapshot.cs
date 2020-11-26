@@ -36,18 +36,12 @@ namespace Domain.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
-                    b.Property<Guid>("TimeId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("Fk_Time");
-
-                    b.Property<Guid?>("TimeId1")
+                    b.Property<Guid?>("TimeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TimeId");
-
-                    b.HasIndex("TimeId1");
 
                     b.ToTable("Jogadores");
 
@@ -56,8 +50,7 @@ namespace Domain.Migrations
 
             modelBuilder.Entity("Domain.src.TabelaEstatistica.TabelaDeEstatisticaTime", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("TimeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Derrotas")
@@ -88,13 +81,10 @@ namespace Domain.Migrations
                     b.Property<int>("SaldoDeGols")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("TimeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Vitorias")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("TimeId");
 
                     b.ToTable("TabelasEstatistica");
 
@@ -114,13 +104,7 @@ namespace Domain.Migrations
                     b.Property<string>("NomeTime")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("TabelaId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TabelaId")
-                        .IsUnique();
 
                     b.ToTable("Times");
 
@@ -173,28 +157,26 @@ namespace Domain.Migrations
             modelBuilder.Entity("Domain.src.Jogadores.Jogador", b =>
                 {
                     b.HasOne("Domain.src.Times.Time", null)
-                        .WithMany()
-                        .HasForeignKey("TimeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.src.Times.Time", null)
                         .WithMany("Jogadores")
-                        .HasForeignKey("TimeId1");
+                        .HasForeignKey("TimeId");
                 });
 
-            modelBuilder.Entity("Domain.src.Times.Time", b =>
+            modelBuilder.Entity("Domain.src.TabelaEstatistica.TabelaDeEstatisticaTime", b =>
                 {
-                    b.HasOne("Domain.src.TabelaEstatistica.TabelaDeEstatisticaTime", null)
-                        .WithOne()
-                        .HasForeignKey("Domain.src.Times.Time", "TabelaId")
+                    b.HasOne("Domain.src.Times.Time", "Time")
+                        .WithOne("Tabela")
+                        .HasForeignKey("Domain.src.TabelaEstatistica.TabelaDeEstatisticaTime", "TimeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Time");
                 });
 
             modelBuilder.Entity("Domain.src.Times.Time", b =>
                 {
                     b.Navigation("Jogadores");
+
+                    b.Navigation("Tabela");
                 });
 #pragma warning restore 612, 618
         }

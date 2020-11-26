@@ -1,12 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.src.Times;
 
 namespace Domain.src.TabelaEstatistica
 {
     public abstract class TabelaDeEstatisticaTime 
     {
-        public Guid Id { get; set; }
-        public Guid TimeId { get; set;}    
+        public Time Time { get; set; }
         public int Pontuacao { get; private set;}
         public int PartidasDisputadas { get; private set;} 
         public int Vitorias { get; private set; } 

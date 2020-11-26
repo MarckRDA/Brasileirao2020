@@ -1,3 +1,4 @@
+using System;
 using Domain.src.Jogadores;
 using Domain.src.TabelaEstatistica;
 using Domain.src.Times;
@@ -19,8 +20,7 @@ namespace Domain.src.Infra
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Initial Catalog = nome do banco de dados que será criado
-            // PWD = password
+            
             optionsBuilder.UseSqlServer("Data Source=localhost;User Id=sa;PWD=Sasuke3634;Initial Catalog=Brasileirao");
         } 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,26 +34,18 @@ namespace Domain.src.Infra
 
             modelBuilder.Entity<Jogador>()
             .HasKey(j => j.Id);
-            modelBuilder.Entity<Jogador>()
-            .HasOne<Time>()
-            .WithMany()
-            .HasForeignKey(j => j.TimeId);
+            
             modelBuilder.Entity<Jogador>()
             .Property(j => j.Nome).IsRequired();
-            modelBuilder.Entity<Jogador>()
-            .Property(j => j.TimeId)
-            .HasColumnName("Fk_Time");
-            
+                        
             modelBuilder.Entity<Time>()
             .HasKey(t => t.Id);
-            modelBuilder.Entity<Time>()
-            .HasOne<TabelaDeEstatisticaTime>()
-            .WithOne()
-            .HasForeignKey<Time>(t => t.TabelaId);            
+            
+            modelBuilder.Entity<TabelaDeEstatisticaTime>()
+            .Property<Guid>("TimeId");
 
             modelBuilder.Entity<TabelaDeEstatisticaTime>()
-            .HasKey(tb => tb.Id);
-             
+            .HasKey("TimeId");
 
         }   
               

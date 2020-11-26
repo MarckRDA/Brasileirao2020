@@ -12,8 +12,7 @@ namespace Domain.src.Jogadores
         [Column(TypeName = "varchar(100)")]
         public string Nome { get; private set; }
         public int Gol { get; private set;}
-        public Guid TimeId { get; set; }
-        
+       
         public Jogador(string nome)
         {
             Nome = nome;

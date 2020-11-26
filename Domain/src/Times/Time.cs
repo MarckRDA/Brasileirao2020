@@ -12,11 +12,11 @@ namespace Domain.src.Times
         public Guid Id { get; private set; } = new Guid();
         public string NomeTime {get; private set;}
         private List<Jogador> jogadores { get; set;} = new List<Jogador>();
-        public IReadOnlyCollection<Jogador> Jogadores => jogadores;
         
         [NotMapped]
+        public Guid JogadoresId { get; set; }
+        public IReadOnlyCollection<Jogador> Jogadores => jogadores;
         public TabelaDeEstatisticaTime Tabela{get; set;}
-        public Guid TabelaId {get; set;} 
      
         public Time(string nomeTime)
         {
@@ -34,7 +34,6 @@ namespace Domain.src.Times
             if (jogadores.Exists(j => j.Id == jogador.Id)) return false;
             
             if (jogadores.Count > 32 ) return false;
-            jogador.TimeId = Id;
             jogadores.Add(jogador);
             return true;
         }
@@ -53,7 +52,7 @@ namespace Domain.src.Times
         public bool AdicionarListaDeJogadores(List<Jogador> jogadores)
         {
             if (jogadores.Count < 16 || jogadores.Count > 32 ) return false;
-            jogadores.Select(j => j.TimeId=Id);            
+            jogadores.Select(j => j.Id == Id);            
             this.jogadores = jogadores;
             return true;
         }

@@ -26,12 +26,12 @@ namespace Domain.src.Times
             {
                 Id = timeRecuperado.Id,
                 NomeTime = timeRecuperado.NomeTime,
-                Jogadores = timeRecuperado.Jogadores.Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, IdTime = j.TimeId ,Gol = j.Gol}).ToList(),
+                Jogadores = timeRecuperado.Jogadores.Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome,Gol = j.Gol}).ToList(),
                 Tabela = timeRecuperado.Tabela
             };
         }
 
-        public List<JogadorDTO> ObterJogadoresDoTime(Guid idTime) => RepositorioTimes.ObterJogadoresDoTime(idTime).Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, IdTime = j.TimeId,Gol = j.Gol}).ToList();
+        public List<JogadorDTO> ObterJogadoresDoTime(Guid idTime) => RepositorioTimes.ObterJogadoresDoTime(idTime).Select(j => new JogadorDTO{Id = j.Id, Nome = j.Nome, Gol = j.Gol}).ToList();
         
         public JogadorDTO ObterJogadorDoTime(Guid idTime, Guid idJogador)
         {
@@ -40,7 +40,6 @@ namespace Domain.src.Times
             {
                 Id = jogadorRecuperado.Id,
                 Nome = jogadorRecuperado.Nome,
-                IdTime = jogadorRecuperado.TimeId,
                 Gol = jogadorRecuperado.Gol
             };
         }
@@ -69,7 +68,6 @@ namespace Domain.src.Times
             {
                 return false;
             }
-            jogadorAAdicionar.TimeId = idTime;
             return RepositorioTimes.AdicionarJogadorAoTime(idTime, jogadorAAdicionar);
         }
 

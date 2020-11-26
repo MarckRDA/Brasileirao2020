@@ -1,9 +1,7 @@
 using System.Linq;
 using System.Text;
 using Doamin.src;
-using Doamin.src.Users;
 using Domain.src.Infra;
-using Domain.src.Users;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
